@@ -1,0 +1,33 @@
+{
+  "name": "gatedeck",
+  "version": "0.0.0",
+  "private": true,
+  "description": "一休PM（Gatedeck）· 决策台优先、证据可校验的本地项目管理工具",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "gatedeck": "dist/cli/index.js",
+    "pm": "dist/cli/index.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.14.0",
+    "@types/node": "^22.9.0",
+    "eslint": "^9.14.0",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.13.0",
+    "vitest": "^2.1.4"
+  }
+}

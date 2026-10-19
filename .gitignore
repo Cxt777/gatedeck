@@ -1,0 +1,15 @@
+# 本项目 .gitignore（立项脚手架生成；按技术栈自行补充）
+node_modules/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+unpackage/
+logs/
+*.log
+.local/
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
