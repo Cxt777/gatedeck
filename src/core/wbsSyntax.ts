@@ -129,13 +129,16 @@ function makeNode(
  * 方案 A · fenced block
  * ---------------------------------------------------------------- */
 
-/** 开 fence：`/^\s{0,3}(`{3,}|~{3,})[ \t]*gatedeck-task[ \t]*$/`（info string 固定） */
-const FENCE_OPEN = /^ {0,3}(`{3,}|~{3,})[ \t]*gatedeck-task[ \t]*$/;
+/** 开 fence：行首至多 3 空格 + 3 个以上反引号/波浪线 + info string（默认 gatedeck-task，事件块复用为 gatedeck-event） */
+function fenceOpenRe(info: string): RegExp {
+  return new RegExp(`^ {0,3}(\`{3,}|~{3,})[ \\t]*${info}[ \\t]*$`);
+}
 
-export function parseFencedTaskBlocks(md: string): WbsParseResult {
+export function parseFencedTaskBlocks(md: string, info = 'gatedeck-task'): WbsParseResult {
   const nodes: WbsNode[] = [];
   const diagnostics: WbsDiagnostic[] = [];
   const lines = scanLines(md);
+  const FENCE_OPEN = fenceOpenRe(info);
   let i = 0;
   while (i < lines.length) {
     const line = lines[i]!;

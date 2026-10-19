@@ -30,7 +30,7 @@
 |---|---|---|---|---|---|---|
 | T-M0a-01 | 工程骨架：Node 22 + TS + pnpm + Vitest + GitHub Actions CI | done | — | G-M0a | `pnpm test` / `pnpm lint` / CI 全绿；目录分层含 `core`（纯 TS，无 IO 依赖） | 【必需】 |
 | T-M0a-02 | wbs.md 节点语法三方案对比原型并定稿 | done | T-M0a-01 | G-M0a | fenced block / HTML comment / 独立任务文件三方案各出原型；真实含注释样本 round-trip 对比报告；定稿结论写入设计文档 | 【必需】 |
-| T-M0a-03 | 规范事件块语法 + 事件信封 schema 定稿 | todo | T-M0a-01 | G-M0a | 信封字段含 event_id/schema_version/kind/occurred_at/recorded_at/actor/origin/integrity/subject/operation_id/payload（基准 3.5）；机器权威字段与人类说明分离；与 T-M0a-02 同批原型 | 【必需】 |
+| T-M0a-03 | 规范事件块语法 + 事件信封 schema 定稿 | done | T-M0a-01 | G-M0a | 信封字段含 event_id/schema_version/kind/occurred_at/recorded_at/actor/origin/integrity/subject/operation_id/payload（基准 3.5）；机器权威字段与人类说明分离；与 T-M0a-02 同批原型 | 【必需】 |
 | T-M0a-04 | 事件来源收据机制（hash chain + 本地锚点） | todo | T-M0a-03 | G-M0a | 收据存 git 忽略的本地安全位置；加载时验证内容+顺序；失败 → integrity=invalid 不参与折叠、进入「需处理」状态、不静默重算；B-10/B-11 口径可实现 | 【必需】 |
 | T-M0a-05 | 状态折叠规则实现（当前阶段派生） | todo | T-M0a-03 | G-M0a | 按 sequence 折叠不按 occurred_at（B-16）；project.initialized 派生初始阶段=gates.md 首阶段；promotion 携带 from/to/expected_sequence/manifest_hash，非法跳跃拒绝；重复 event_id 幂等（B-13）；补偿/撤销走追加事件 | 【必需】 |
 | T-M0a-06 | 注册表 provider：native + projects-index | todo | T-M0a-01 | G-M0a | native 读写 `.gatedeck/registry.md`（workspace_id=ULID + binding_key）+ registry.local.md（默认 git 忽略）；projects-index 只读解析根 PROJECTS-INDEX.md 投影，不写工作区根（D-30）；B-14/B-15 测试过 | 【必需】 |
@@ -130,5 +130,6 @@
 | 2026-10-19 | **主理人确认**：状态枚举定为**双语并列**（英文机器权威 + 中文显示层，以英文为准）；基准指针**保持外部**并补记来源版本 v2.1 + 转写日期 2026-10-19 | 主理人 |
 | 2026-10-19 | T-M0a-01 → done：本地 lint/typecheck/test（4 用例）/build 全绿 + CLI 冒烟通过；首次提交 d552391（脚手架）、7ef4c70（骨架）。注：CI 云端首跑待建立远程仓库后补验（本机无法复现 GitHub runner） | 夜间开发任务（AI） |
 | 2026-10-19 | T-M0a-02 → done：三方案原型（`src/core/wbsSyntax.ts`，18 用例）+ round-trip 对比报告（docs/review/）+ 定稿设计文档（docs/design/，fenced block 方案胜出）；lint/typecheck/test（22 用例）全绿。定稿随 G-M0a 提请主理人过目 | 夜间开发任务（AI） |
+| 2026-10-19 | T-M0a-03 → done：事件信封 schema + 块语法落地（`src/core/eventEnvelope.ts`，14 用例；kind×origin 兼容矩阵编码 B-4/B-17）；定稿设计文档（docs/design/，含 usage.reported 增补提议、validation_status 不进信封裁决）；test（37 用例）/lint/typecheck 全绿。增补与裁决随 G-M0a 提请主理人过目 | 夜间开发任务（AI） |
 
 <!-- 新 WBS 段落按「## WBS-{N} {段名}」追加，表结构保持一致 -->
