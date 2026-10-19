@@ -44,6 +44,6 @@
 | 项 | 落点 |
 |---|---|
 | 原型实现 | `src/core/wbsSyntax.ts`（纯函数，无 IO，purity 守卫覆盖） |
-| 测试 | `src/core/wbsSyntax.test.ts`，18 用例 |
+| 测试 | `src/core/wbsSyntax.test.ts`，17 用例 |
 | 下游任务 | T-M0b-01（解析/校验/局部修改内核）按本规格实现；T-M1-01（契约模板 v1）按 2.3 生成 `pm/wbs.md` |
 | 待主理人过目项 | ① 方案 A 胜出结论；② 已知字段必需/可选划分；③ 段落结构 2.3 的"标题以块内为准"裁决 |

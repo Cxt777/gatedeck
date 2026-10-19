@@ -1,6 +1,6 @@
 # T-M0a-02 · wbs.md 节点语法三方案 round-trip 对比报告
 
-> 任务：T-M0a-02 ｜ 日期：2026-10-19 ｜ 原型：`src/core/wbsSyntax.ts` ｜ 测试：`src/core/wbsSyntax.test.ts`（18 用例）
+> 任务：T-M0a-02 ｜ 日期：2026-10-19 ｜ 原型：`src/core/wbsSyntax.ts` ｜ 测试：`src/core/wbsSyntax.test.ts`（17 用例）
 > 结论建议见《[wbs节点语法定稿](../design/wbs节点语法定稿.md)》，随 G-M0a 提请主理人过目。
 
 ## 一、目的与方法

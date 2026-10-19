@@ -129,7 +129,7 @@
 | 2026-10-19 | 自工作区规划目录 WBS 文件迁入 48 项任务（M0a×7 / M0b×9 / M1×13 / M2a×7 / M2b×6 / M3×6）；状态枚举统一为 `todo/doing/done/blocked/dropped`；T-M0a-01 置 `doing`（本地验证绿、CI 待云端） | 项目 AI（起草） |
 | 2026-10-19 | **主理人确认**：状态枚举定为**双语并列**（英文机器权威 + 中文显示层，以英文为准）；基准指针**保持外部**并补记来源版本 v2.1 + 转写日期 2026-10-19 | 主理人 |
 | 2026-10-19 | T-M0a-01 → done：本地 lint/typecheck/test（4 用例）/build 全绿 + CLI 冒烟通过；首次提交 d552391（脚手架）、7ef4c70（骨架）。注：CI 云端首跑待建立远程仓库后补验（本机无法复现 GitHub runner） | 夜间开发任务（AI） |
-| 2026-10-19 | T-M0a-02 → done：三方案原型（`src/core/wbsSyntax.ts`，18 用例）+ round-trip 对比报告（docs/review/）+ 定稿设计文档（docs/design/，fenced block 方案胜出）；lint/typecheck/test（22 用例）全绿。定稿随 G-M0a 提请主理人过目 | 夜间开发任务（AI） |
+| 2026-10-19 | T-M0a-02 → done：三方案原型（`src/core/wbsSyntax.ts`，17 用例）+ round-trip 对比报告（docs/review/）+ 定稿设计文档（docs/design/，fenced block 方案胜出）；lint/typecheck/test（22 用例）全绿。定稿随 G-M0a 提请主理人过目 | 夜间开发任务（AI） |
 | 2026-10-19 | T-M0a-03 → done：事件信封 schema + 块语法落地（`src/core/eventEnvelope.ts`，14 用例；kind×origin 兼容矩阵编码 B-4/B-17）；定稿设计文档（docs/design/，含 usage.reported 增补提议、validation_status 不进信封裁决）；test（37 用例）/lint/typecheck 全绿。增补与裁决随 G-M0a 提请主理人过目 | 夜间开发任务（AI） |
 
 <!-- 新 WBS 段落按「## WBS-{N} {段名}」追加，表结构保持一致 -->

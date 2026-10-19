@@ -33,7 +33,7 @@
 
 ## 【结果】计划的执行结果（完成后追加）
 
-- 实际产出：`src/core/wbsSyntax.ts`（三方案解析器，spans + reconstruct + updateField，未知字段/未解析行保留并出诊断）、`src/core/wbsSyntax.test.ts`（18 用例：三方案 round-trip 字节级、CRLF、同字符 fence 冲突、`-->` 死锁、局部修改不碰邻域）、`docs/review/T-M0a-02-wbs节点语法三方案对比报告.md`、`docs/design/wbs节点语法定稿.md`（定稿：fenced block 方案）。
-- 验证结果（真实执行）：`pnpm lint` 退出码 0；`pnpm typecheck` 退出码 0；`pnpm test` 3 文件 22 用例全过（本任务新增 18）。开发中修复两处实现缺陷：字段 key 未支持中文（F-06 场景）、未闭合注释检测切片截断。
+- 实际产出：`src/core/wbsSyntax.ts`（三方案解析器，spans + reconstruct + updateField，未知字段/未解析行保留并出诊断）、`src/core/wbsSyntax.test.ts`（17 用例：三方案 round-trip 字节级、CRLF、同字符 fence 冲突、`-->` 死锁、局部修改不碰邻域）、`docs/review/T-M0a-02-wbs节点语法三方案对比报告.md`、`docs/design/wbs节点语法定稿.md`（定稿：fenced block 方案）。
+- 验证结果（真实执行）：`pnpm lint` 退出码 0；`pnpm typecheck` 退出码 0；`pnpm test` 3 文件 22 用例全过（本任务新增 17 + purity 守卫随 core 文件数自动扩展 1）。开发中修复两处实现缺陷：字段 key 未支持中文（F-06 场景）、未闭合注释检测切片截断。
 - 计划偏差与原因：无。
 - 未完成项与后续动作：定稿结论随 G-M0a 提请主理人过目；wbs.md 完整内核（含非法行恢复策略细化）归 T-M0b-01。
