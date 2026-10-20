@@ -20,3 +20,18 @@ export function isStrictlyIncreasing(sequence: readonly number[]): boolean {
   }
   return true;
 }
+
+/** 覆盖基准 3.5 的哈希函数 */
+export { sha256Hex, sha256HexBytes } from './hash.js';
+
+/** T-M0a-03：规范事件块语法 + 事件信封 schema（kind×origin 矩阵编码 B-4/B-17） */
+export * from './eventEnvelope.js';
+
+/** T-M0a-04：事件来源收据（hash chain + 本地锚点，B-10/B-11） */
+export * from './eventReceipt.js';
+
+/** T-M0a-05：状态折叠规则（当前阶段派生，D-24/B-13/B-16） */
+export * from './stageFold.js';
+
+/** T-M0a-06：注册表 provider（native + projects-index，D-30/B-14/B-15） */
+export * from './registry.js';
