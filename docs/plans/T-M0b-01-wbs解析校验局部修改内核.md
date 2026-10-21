@@ -22,7 +22,7 @@
 
 ## 【结果】计划的执行结果（完成后追加）
 
-- 实际产出：`src/core/wbsKernel.ts`（校验 + 局部修改内核）与 22 用例测试；`index.ts` 导出。
-- 验证结果：pnpm lint / typecheck / test（9 文件 150 用例）/ build 全绿。
-- 计划偏差与原因：无。
+- 实际产出：`src/core/wbsKernel.ts`（validateWbsDocument 节点级+文档级校验 / updateTaskFieldById 局部修改 / getNodeField）与 17 用例测试；`index.ts` 导出。
+- 验证结果：与 T-M0b-02 同批全量验证——pnpm lint / typecheck / test（9 文件 122 用例）/ build 全绿。
+- 计划偏差与原因：用例数 22→17（部分场景合并），无功能偏差。
 - 未完成项与后续动作：无（验收标准全部满足）。
