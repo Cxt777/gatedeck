@@ -35,3 +35,6 @@ export * from './stageFold.js';
 
 /** T-M0a-06：注册表 provider（native + projects-index，D-30/B-14/B-15） */
 export * from './registry.js';
+
+/** T-M0b-01：wbs.md 解析/校验/局部修改内核（P-04/R-04） */
+export * from './wbsKernel.js';
