@@ -38,3 +38,6 @@ export * from './registry.js';
 
 /** T-M0b-01：wbs.md 解析/校验/局部修改内核（P-04/R-04） */
 export * from './wbsKernel.js';
+
+/** T-M0b-02：changelog/insights 事件日志投影 + append-only 追加（S2.1-04/R-02） */
+export * from './eventLog.js';
