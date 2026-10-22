@@ -47,3 +47,6 @@ export * from './optimisticWrite.js';
 
 /** T-M0b-04：跨文件操作恢复状态机——四相 + 中断点恢复（P-06/B-2） */
 export * from './operationRecovery.js';
+
+/** T-M0b-05：唯一权威位置校验内核 + 冲突显示（D-24/基准 3.1/3.3） */
+export * from './authorityRules.js';
