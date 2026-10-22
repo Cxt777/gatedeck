@@ -44,3 +44,6 @@ export * from './eventLog.js';
 
 /** T-M0b-03：乐观并发写入——内容 hash compare-and-set（P-06/B-1） */
 export * from './optimisticWrite.js';
+
+/** T-M0b-04：跨文件操作恢复状态机——四相 + 中断点恢复（P-06/B-2） */
+export * from './operationRecovery.js';
