@@ -41,3 +41,6 @@ export * from './wbsKernel.js';
 
 /** T-M0b-02：changelog/insights 事件日志投影 + append-only 追加（S2.1-04/R-02） */
 export * from './eventLog.js';
+
+/** T-M0b-03：乐观并发写入——内容 hash compare-and-set（P-06/B-1） */
+export * from './optimisticWrite.js';
