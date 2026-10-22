@@ -44,9 +44,9 @@
 |---|---|---|---|---|---|---|
 | T-M0b-01 | wbs.md 解析/校验/局部修改内核 | done | T-M0a-02 | G-M0b | round-trip 保真：不吞注释、不重排手写顺序、未知字段保留（P-04）；含注释/未知字段/中文/换行差异测试集全过 | 【必需】 |
 | T-M0b-02 | changelog/insights 规范事件块解析器 | done | T-M0a-03, T-M0a-04 | G-M0b | 按 M0a schema 稳定解析；缺少合法 event_id 或未在收据链登记 → external-unverified（S2.1-04）；append-only 行为规则 | 【必需】 |
-| T-M0b-03 | 乐观并发（内容 hash compare-and-set） | todo | T-M0b-01 | G-M0b | 写入前按真实字节 hash 检测，不一致拒绝并提示重读重试；B-1 过；对外声明不承诺任意编辑器零丢失 | 【必需】 |
-| T-M0b-04 | 操作恢复状态机（跨文件四相） | todo | T-M0b-02 | G-M0b | prepared→applied→logged→committed/aborted；逐中断点注入验证可恢复，不留状态与日志不一致；中断提交保留可恢复材料；B-2 过 | 【必需】 |
-| T-M0b-05 | 校验内核：每事实唯一权威位置 + 冲突显示 | todo | T-M0b-01 | G-M0b | 当前阶段不落 project.md（D-24）；发现重复存储/推导冲突以权威位置为准显示差异并告警 | 【必需】 |
+| T-M0b-03 | 乐观并发（内容 hash compare-and-set） | done | T-M0b-01 | G-M0b | 写入前按真实字节 hash 检测，不一致拒绝并提示重读重试；B-1 过；对外声明不承诺任意编辑器零丢失 | 【必需】 |
+| T-M0b-04 | 操作恢复状态机（跨文件四相） | done | T-M0b-02 | G-M0b | prepared→applied→logged→committed/aborted；逐中断点注入验证可恢复，不留状态与日志不一致；中断提交保留可恢复材料；B-2 过 | 【必需】 |
+| T-M0b-05 | 校验内核：每事实唯一权威位置 + 冲突显示 | done | T-M0b-01 | G-M0b | 当前阶段不落 project.md（D-24）；发现重复存储/推导冲突以权威位置为准显示差异并告警 | 【必需】 |
 | T-M0b-06 | 派生状态版本（as_of + compare-and-set） | todo | T-M0b-05 | G-M0b | 决策台/风险分组/handoff 携带 as_of/源版本；过期投影提交被拒 | 【必需】 |
 | T-M0b-07 | 外部编辑检测（指纹比对 + observed_at） | todo | T-M0a-04 | G-M0b | 受管写路径外的内容变更可检测；外部修改只记 observed_at 不回填 occurred_at；观察不到的中间过程标未知 | 【必需】 |
 | T-M0b-08 | CLI 骨架 | todo | T-M0b-01 | G-M0b | `pm` 命令框架 + `init/discover/adopt/register/ls` 子命令占位与帮助；discover/ls 纯只读 | 【必需】 |
