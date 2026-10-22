@@ -97,24 +97,31 @@ describe('T-M0b-02 · 事件日志投影', () => {
     expect(p.chainIssues.some((i) => i.code === 'anchor-mismatch')).toBe(true);
   });
 
-  it('event_id 非法 ULID → malformed（S2.1-04「缺少合法 event_id」分支），原文保留', () => {
+  it('event_id 非法 ULID → external-unverified（S2.1-04「缺少合法 event_id」）+ malformed 子标记，原文保留', () => {
     const e1 = env();
     const badBlock = serializeEventBlock(e1).replace(`event_id: ${ID_1}`, 'event_id: NOT-A-ULID');
     const p = projectEventLog(badBlock, [], null);
     expect(p.entries).toHaveLength(1);
-    expect(p.entries[0]!.status).toBe('malformed');
+    expect(p.entries[0]!.status).toBe('external-unverified');
+    expect(p.entries[0]!.effectiveIntegrity).toBe('unknown');
+    expect(p.entries[0]!.malformed).toBe(true);
     expect(p.entries[0]!.eventId).toBeNull();
     expect(p.entries[0]!.diagnostics!.some((d) => d.code === 'bad-format')).toBe(true);
+    // 信封致命缺陷不得静默忽略（P-08）
+    expect(p.malformedCount).toBe(1);
+    expect(p.needsAttention).toBe(true);
     // 原文保留于 blocks（round-trip 不丢字节）
     expect(reconstruct(badBlock, p.blocks)).toBe(badBlock);
   });
 
-  it('块内完全缺失 event_id 字段 → malformed（missing-field）', () => {
+  it('块内完全缺失 event_id 字段 → external-unverified + malformed（missing-field）', () => {
     const e1 = env();
     const noId = serializeEventBlock(e1).replace(`event_id: ${ID_1}\n`, '');
     const p = projectEventLog(noId, [], null);
-    expect(p.entries[0]!.status).toBe('malformed');
+    expect(p.entries[0]!.status).toBe('external-unverified');
+    expect(p.entries[0]!.malformed).toBe(true);
     expect(p.entries[0]!.diagnostics!.some((d) => d.code === 'missing-field')).toBe(true);
+    expect(p.needsAttention).toBe(true);
   });
 
   it('混合文档：malformed 块不干扰其他事件裁定（文档序保持）', () => {
@@ -123,8 +130,11 @@ describe('T-M0b-02 · 事件日志投影', () => {
     const badBlock = serializeEventBlock(e1).replace(`event_id: ${ID_1}`, 'event_id: 残缺');
     const md = badBlock + '\n' + serializeEventBlock(manual);
     const p = projectEventLog(md, [], null);
-    expect(p.entries.map((e) => e.status)).toEqual(['malformed', 'external-unverified']);
+    expect(p.entries.map((e) => e.status)).toEqual(['external-unverified', 'external-unverified']);
+    expect(p.entries[0]!.malformed).toBe(true);
+    expect(p.entries[1]!.malformed).toBe(false);
     expect(p.entries[1]!.eventId).toBe(ID_2);
+    expect(p.malformedCount).toBe(1);
   });
 
   it('块外人类说明不产生条目；空文档投影为空', () => {
@@ -204,6 +214,21 @@ describe('T-M0b-02 · append-only 追加（R-02）', () => {
     if (!r2.ok) return;
     expect(r2.text.startsWith(t1)).toBe(true);
     expect(t1.startsWith(serializeEventBlock(a))).toBe(true);
+  });
+
+  it('CRLF 文档追加：分隔符与新块沿用 CRLF，不引入裸 LF（低·2）', () => {
+    const e1 = env();
+    const e2 = env({ event_id: ID_2, origin: 'manual', kind: 'note', integrity: 'unknown', payload: {} });
+    const base = serializeEventBlock(e1).replace(/\n/g, '\r\n');
+    const r = appendEventBlock(base, e2, '第一行说明\n第二行说明');
+    expect(r.ok).toBe(true);
+    if (!r.ok) return;
+    expect(r.text.startsWith(base)).toBe(true);
+    // 前缀逐字节保留；追加区无「非 \r 的裸 \n」
+    expect(/[^\r]\n/.test(r.text.slice(base.length))).toBe(false);
+    expect(r.text.slice(base.length)).toContain('第一行说明\r\n第二行说明\r\n');
+    const p = projectEventLog(r.text, [], null);
+    expect(p.entries.map((e) => e.eventId)).toEqual([ID_1, ID_2]);
   });
 });
 
