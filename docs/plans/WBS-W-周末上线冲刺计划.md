@@ -169,3 +169,12 @@
 
 - `01-TASK-SPECTRUM.md` WBS-0.2 / WBS-0.3 仍为 `doing`：T-M0a-01（=WBS-0.3）早已 done，WBS-0.2 的迁入工作亦已完成，两行是否迁 `done` 请主理人裁决（AI 不代迁）。
 - `docs/review/T-M0a-07-slug终核与命名收尾报告.md` 中「基准 D-23 回写」仍待主理人执行或授权（本轮 W-S0-2 将其纳入冲刺前段）。
+
+---
+
+## 修订记录（append-only）
+
+| 日期 | 修订 | 依据 |
+|---|---|---|
+| 2026-10-23 | **CP-1 依预授权完成拍板**：DP-1~DP-5 全部按本计划推荐执行（DP-1 单包多 bin / DP-2 rc 期开源免费 + README 价值对照清单 / DP-3 让路顺序按第 6 节 / DP-4 GitHub + Pages + npm / DP-5 `0.1.0-rc.1` + `early` + tag）；冲刺范围冻结；本计划正文 workBuddy 字样按历史原文保留，以本记录为准替换为 gatedeck-mcp（见下条） | 主理人 2026-10-23 晚预授权（冲刺期合理授权免确认、超 10 分钟按推荐继续、不得影响进度）；CHANGELOG 2026-10-23 23:15 两条 |
+| 2026-10-23 | **对外 MCP 服务名弃用 workBuddy，定名 `gatedeck-mcp`**：主理人提醒 WorkBuddy 为腾讯在营 agent 产品（workbuddy.ai），R2 商标混淆成立；替代名核查 gatedeck-mcp ✓ 定名 / firstmate ✓ 备选 / deckhand ✗ 被占。DP-1 落为单包三 bin：`gatedeck`（主 CLI）/ `pm`（别名）/ `gatedeck-mcp`（MCP server 入口）。后续 S3/S4 全部 WP 以 gatedeck-mcp 为准；排期与让路顺序不变 | 主理人情报 + AI 核实（2026-10-23）；10 分钟规则裁定，可否决重跑 |
