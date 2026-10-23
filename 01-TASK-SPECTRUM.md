@@ -34,7 +34,7 @@
 | T-M0a-04 | 事件来源收据机制（hash chain + 本地锚点） | done | T-M0a-03 | G-M0a | 收据存 git 忽略的本地安全位置；加载时验证内容+顺序；失败 → integrity=invalid 不参与折叠、进入「需处理」状态、不静默重算；B-10/B-11 口径可实现 | 【必需】 |
 | T-M0a-05 | 状态折叠规则实现（当前阶段派生） | done | T-M0a-03 | G-M0a | 按 sequence 折叠不按 occurred_at（B-16）；project.initialized 派生初始阶段=gates.md 首阶段；promotion 携带 from/to/expected_sequence/manifest_hash，非法跳跃拒绝；重复 event_id 幂等（B-13）；补偿/撤销走追加事件 | 【必需】 |
 | T-M0a-06 | 注册表 provider：native + projects-index | done | T-M0a-01 | G-M0a | native 读写 `.gatedeck/registry.md`（workspace_id=ULID + binding_key）+ registry.local.md（默认 git 忽略）；projects-index 只读解析根 PROJECTS-INDEX.md 投影，不写工作区根（D-30）；B-14/B-15 测试过 | 【必需】 |
-| T-M0a-07 | slug 终核与命名收尾 | todo | — | G-M0a | npm 包名 `gatedeck` 可注册确认；CLI bin 名冲突评估结论（`pm` 或主命令 `gatedeck`）；PyPI 复核 + 域名检索；结果回写基准 D-23 留痕 | 【必需】 |
+| T-M0a-07 | slug 终核与命名收尾 | done | — | G-M0a | npm 包名 `gatedeck` 可注册确认；CLI bin 名冲突评估结论（`pm` 或主命令 `gatedeck`）；PyPI 复核 + 域名检索；结果回写基准 D-23 留痕（2026-10-23 WBS-W/W-S0-2 完成回写：bin 三注册终裁 + MCP 服务名 gatedeck-mcp，见 docs/review/T-M0a-07 报告第四节） | 【必需】 |
 
 **G-M0a 准出**：M0a 全部必需任务 done；语法/schema/收据/折叠/provider 五项设计文档齐备且经主理人过目。
 
@@ -132,7 +132,7 @@
 | ID | 任务 | 状态 | 前置 | 门禁 | 验收标准 | 必需性 |
 |---|---|---|---|---|---|---|
 | W-S0-1 | S0 决策包：DP-1~DP-5 拍板 + 冲刺范围冻结 | done | 本段立项 | — | 五项决策结论留痕 CHANGELOG；让路顺序获主理人确认（依 2026-10-23 预授权按推荐拍板，可否决重跑） | 【必需】 |
-| W-S0-2 | T-M0a-07 收尾：gatedeck-mcp 名核查（npm/域名/商标）+ 基准 D-23 回写 + bin 名终裁 | doing | W-S0-1 | G-M0a | 见 T-M0a-07 行；名核查结论落 `docs/review/`；回写经主理人执行或授权（已获冲刺预授权） | 【必需】 |
+| W-S0-2 | T-M0a-07 收尾：gatedeck-mcp 名核查（npm/域名/商标）+ 基准 D-23 回写 + bin 名终裁 | done | W-S0-1 | G-M0a | 见 T-M0a-07 行；名核查结论落 `docs/review/`（已落，第四节）；回写经主理人执行或授权（已依冲刺预授权执行） | 【必需】 |
 | W-S0-3 | 远程仓库与 CI 基线 | todo | W-S0-1 | — | GitHub 仓库建立；CI 云端首跑真实通过；分支保护开启 | 【必需】 |
 
 ### S1 内核收尾（周六日间，G-M0b 准出）
@@ -207,5 +207,6 @@
 | 2026-10-23 | WBS-W 微调（**主理人授权 2026-10-23**，限本冲刺）：CP-2 门禁准出审核改为 **DeepSeek 模型双轮审核机制**——至多 2 轮、轮 2 复审后即通过；未关闭问题逐项入 `docs/review/WBS-W-门禁审核遗留清单.md`（轮次记录 append-only、状态迁移留痕）；后续 WP 命中清单影响面必须先修复并重新送审、closed 后方可继续。授权边界：仅替代 G-M0a/G-M0b「经主理人过目」环节，硬准出条件（必需任务 done/三类样本全过/CI 云端真实绿）与门禁开启动作不随授权转移（W-06）；正式 v0.1.0 前门禁回归基准原制度。审核 token 口径按项目既有设计：材料包按 `pm handoff` 软预算机制（估算/标字符数、超限提示不静默裁剪，B-8），每轮消耗按 T-M2a-05/MOD-08 契约字段手工留痕（无计量不猜）；材料脱敏 W-01/W-02 不豁免。同步：W-S1-5 验收标准更新；新增 W-S5-3 遗留清单值守（工作包计数 27→28）；排期 CP-2 调整为周六 17:00–19:00 | 主理人（授权）+ 项目 AI（落档） |
 | 2026-10-23 | **CP-1 依预授权完成拍板**（主理人 2026-10-23 晚预授权：冲刺期合理授权免确认、超 10 分钟无回应按推荐继续、不得影响进度；资源规则 GLM-5.3 拆解 + GLM-5.3-Flash 执行子任务、免费计划额度优先耗尽后可用个人额度）：DP-1 单包 `gatedeck` 三 bin（`gatedeck`/`pm`/`gatedeck-mcp`）；DP-2 rc 期开源免费 + README 999 元价值对照清单（商业形式另行立项）；DP-3 让路顺序按计划第 6 节预定义；DP-4 GitHub 公开仓库 + GitHub Pages + npm；DP-5 `0.1.0-rc.1` + dist-tag `early` + git tag `v0.1.0-rc.1`。冲刺范围冻结。**W-S0-1 → done**。主理人可否决任一项，否决后受影响 WP 重跑 | 主理人（预授权）+ 项目 AI（落痕） |
 | 2026-10-23 | **弃用对外服务名 workBuddy**（主理人情报：腾讯 WorkBuddy 为在营 agent 产品，R2 商标混淆；AI 核实属实，workbuddy.ai + 腾讯云企业版）：**定名 `gatedeck-mcp`**（npm 404 可注册；备选 firstmate 可注册保留；deckhand 已被占用）。WBS-W 段活文档同步更新（段首/S0 表/S3 段名/S4 表/准出行），历史留痕条目按 W-05 不回改；总计划按 append-only 以文末修订记录承载。**W-S0-2 → doing** | 主理人（情报）+ 项目 AI（核实与裁定） |
+| 2026-10-23 | T-M0a-07 → done、**W-S0-2 → done**：第二轮核查落 docs/review/T-M0a-07 报告第四节；外部基准 D-23 回写已执行（终核增注 + MCP 服务名终裁增订 + 开放问题 6 闭环）；本项目基准第七节命名契约更新为 bin 三注册终裁（gatedeck/pm/gatedeck-mcp）。回写依主理人冲刺预授权 AI 代笔，CHANGELOG 23:30 留痕 | 项目 AI（依预授权代笔） |
 
 <!-- 新 WBS 段落按「## WBS-{N} {段名}」追加，表结构保持一致 -->
