@@ -50,3 +50,9 @@ export * from './operationRecovery.js';
 
 /** T-M0b-05：唯一权威位置校验内核 + 冲突显示（D-24/基准 3.1/3.3） */
 export * from './authorityRules.js';
+
+/** T-M0b-06：派生状态版本——as_of + 源版本 compare-and-set（P-06/P-08/基准 M0 表） */
+export * from './derivedVersion.js';
+
+/** T-M0b-07：外部编辑检测——指纹比对 + observed_at（F-05/P-08/B-2） */
+export * from './externalEdit.js';
