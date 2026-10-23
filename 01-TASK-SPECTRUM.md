@@ -47,9 +47,9 @@
 | T-M0b-03 | 乐观并发（内容 hash compare-and-set） | done | T-M0b-01 | G-M0b | 写入前按真实字节 hash 检测，不一致拒绝并提示重读重试；B-1 过；对外声明不承诺任意编辑器零丢失 | 【必需】 |
 | T-M0b-04 | 操作恢复状态机（跨文件四相） | done | T-M0b-02 | G-M0b | prepared→applied→logged→committed/aborted；逐中断点注入验证可恢复，不留状态与日志不一致；中断提交保留可恢复材料；B-2 过 | 【必需】 |
 | T-M0b-05 | 校验内核：每事实唯一权威位置 + 冲突显示 | done | T-M0b-01 | G-M0b | 当前阶段不落 project.md（D-24）；发现重复存储/推导冲突以权威位置为准显示差异并告警 | 【必需】 |
-| T-M0b-06 | 派生状态版本（as_of + compare-and-set） | todo | T-M0b-05 | G-M0b | 决策台/风险分组/handoff 携带 as_of/源版本；过期投影提交被拒 | 【必需】 |
-| T-M0b-07 | 外部编辑检测（指纹比对 + observed_at） | todo | T-M0a-04 | G-M0b | 受管写路径外的内容变更可检测；外部修改只记 observed_at 不回填 occurred_at；观察不到的中间过程标未知 | 【必需】 |
-| T-M0b-08 | CLI 骨架 | todo | T-M0b-01 | G-M0b | `pm` 命令框架 + `init/discover/adopt/register/ls` 子命令占位与帮助；discover/ls 纯只读 | 【必需】 |
+| T-M0b-06 | 派生状态版本（as_of + compare-and-set） | done | T-M0b-05 | G-M0b | 决策台/风险分组/handoff 携带 as_of/源版本；过期投影提交被拒 | 【必需】 |
+| T-M0b-07 | 外部编辑检测（指纹比对 + observed_at） | done | T-M0a-04 | G-M0b | 受管写路径外的内容变更可检测；外部修改只记 observed_at 不回填 occurred_at；观察不到的中间过程标未知 | 【必需】 |
+| T-M0b-08 | CLI 骨架 | done | T-M0b-01 | G-M0b | `pm` 命令框架 + `init/discover/adopt/register/ls` 子命令占位与帮助；discover/ls 纯只读 | 【必需】 |
 | T-M0b-09 | M0 门禁演练：合成样本回归 | todo | T-M0b-01~07 | G-M0b | 保真/并发/中断三类合成样本全过；B-10/B-11 收据口径入 CI；CI 绿 | 【必需】 |
 
 **G-M0b 准出**：M0b 全部必需任务 done；三类合成样本全过；CI 绿。
@@ -208,5 +208,8 @@
 | 2026-10-23 | **CP-1 依预授权完成拍板**（主理人 2026-10-23 晚预授权：冲刺期合理授权免确认、超 10 分钟无回应按推荐继续、不得影响进度；资源规则 GLM-5.3 拆解 + GLM-5.3-Flash 执行子任务、免费计划额度优先耗尽后可用个人额度）：DP-1 单包 `gatedeck` 三 bin（`gatedeck`/`pm`/`gatedeck-mcp`）；DP-2 rc 期开源免费 + README 999 元价值对照清单（商业形式另行立项）；DP-3 让路顺序按计划第 6 节预定义；DP-4 GitHub 公开仓库 + GitHub Pages + npm；DP-5 `0.1.0-rc.1` + dist-tag `early` + git tag `v0.1.0-rc.1`。冲刺范围冻结。**W-S0-1 → done**。主理人可否决任一项，否决后受影响 WP 重跑 | 主理人（预授权）+ 项目 AI（落痕） |
 | 2026-10-23 | **弃用对外服务名 workBuddy**（主理人情报：腾讯 WorkBuddy 为在营 agent 产品，R2 商标混淆；AI 核实属实，workbuddy.ai + 腾讯云企业版）：**定名 `gatedeck-mcp`**（npm 404 可注册；备选 firstmate 可注册保留；deckhand 已被占用）。WBS-W 段活文档同步更新（段首/S0 表/S3 段名/S4 表/准出行），历史留痕条目按 W-05 不回改；总计划按 append-only 以文末修订记录承载。**W-S0-2 → doing** | 主理人（情报）+ 项目 AI（核实与裁定） |
 | 2026-10-23 | T-M0a-07 → done、**W-S0-2 → done**：第二轮核查落 docs/review/T-M0a-07 报告第四节；外部基准 D-23 回写已执行（终核增注 + MCP 服务名终裁增订 + 开放问题 6 闭环）；本项目基准第七节命名契约更新为 bin 三注册终裁（gatedeck/pm/gatedeck-mcp）。回写依主理人冲刺预授权 AI 代笔，CHANGELOG 23:30 留痕 | 项目 AI（依预授权代笔） |
+| 2026-10-23 | T-M0b-06 → done：派生状态版本（`src/core/derivedVersion.ts`，10 用例；DerivedVersion/versionOf/formatVersion + checkFreshSubmission 版本 compare-and-set，四类拒绝码 stale-projection/version-ahead/as-of-mismatch/invalid-version，过期投影提交被拒；含与 stageFold 折叠输出端到端），提交 13ee2f7；计划日志 docs/plans/T-M0b-06-派生状态版本.md | 夜间开发任务（AI） |
+| 2026-10-23 | T-M0b-07 → done：外部编辑检测（`src/core/externalEdit.ts`，12 用例；nextBaseline 与 optimisticWrite 同源指纹、observeExternalEdit 三态、ExternalObservation 结构上无 occurredAt 字段（P-08 只记 observed_at 不回填）、external-change 恒 intermediateUnknown=true、summarizeExternalScan 不静默；B-2 竞争场景入 CI 回归），提交 9e93c14；计划日志 docs/plans/T-M0b-07-外部编辑检测.md | 夜间开发任务（AI） |
+| 2026-10-23 | T-M0b-08 → done：CLI 骨架（重写 `src/cli/index.ts`，9 用例 + dist 冒烟；五子命令注册表 init/discover/adopt/register/ls 含 readOnly 标注、runCli 可注入 IO、直接执行守卫；占位执行退出码 2 明示未实现零副作用（W-06）；discover/ls 纯只读 B-7 前置），提交 4a0396e；计划日志 docs/plans/T-M0b-08-CLI骨架.md。本批全量 lint/typecheck/test（15 文件 208 用例）/build 全绿；WBS-W 段 W-S1-1~3（= 本三任务）按「状态只在原段落维护，不在本段双写」规则不另迁移 | 夜间开发任务（AI） |
 
 <!-- 新 WBS 段落按「## WBS-{N} {段名}」追加，表结构保持一致 -->
