@@ -118,6 +118,75 @@
 
 **G-M3 准出**：v0.1.0 公开；接入与升级路径被外部用户验证。
 
+## WBS-W · 周末上线冲刺（2026-10-24/25 ｜ gatedeck v0.1.0-rc.1 + workBuddy MCP 上线）
+
+> **编排层段落**：只列工作包（WP）级条目，不拆内部步骤（主理人指令 2026-10-23）；总计划与排期见 `docs/plans/WBS-W-周末上线冲刺计划.md`。
+> **workBuddy**（新增产品名）= 一休PM 对外 MCP 服务：MOD-06 十五工具全集（读 7 + 写 3 + check_gate/request_promotion + record_note/submit_evidence/report_usage），供 AI 客户端直接接管项目；gatedeck 为引擎包名。
+> **rc 诚实边界**：G-M1 两周自举度量与 G-M3 外部验证物理上无法周末达成 → 周末上线 **v0.1.0-rc.1**（dist-tag `early`，对外明示 early access），正式 v0.1.0 按原门禁后补；M2a/M2b 全量后补。
+> **999 元 = 价值准出锚**（V1 5 分钟接入 / V2 3 分钟 AI 接管 / V3 证据可复验 / V4 本地优先 / V5 文档 / V6 稳定性），非 rc 期定价；商业形式为 CP-1 决策项 DP-2。
+> **主理人检查点**：CP-1 周六 09:00 决策拍板（DP-1 命名包策略 / DP-2 商业形式 / DP-3 让路预案 / DP-4 渠道账号 / DP-5 版本 tag）｜CP-2 周六 17:00–19:00 G-M0a/G-M0b 准出审核（**DeepSeek 双轮审核机制，主理人授权 2026-10-23，限本冲刺**：2 轮封顶即通过、未关闭项入遗留清单、命中影响面的后续 WP 必须修复后重审；硬准出条件与门禁开启权不在授权内）+ 主理人开启｜CP-3 周日 20:00 发布授权。门禁开启仍须主理人人工执行，AI 不得代开。
+> 原任务状态仍在原段落维护，本段「=」行仅引用原任务 ID 与其验收标准。
+
+### S0 定向与地基（周五晚–周六早）
+
+| ID | 任务 | 状态 | 前置 | 门禁 | 验收标准 | 必需性 |
+|---|---|---|---|---|---|---|
+| W-S0-1 | S0 决策包：DP-1~DP-5 拍板 + 冲刺范围冻结 | todo | 本段立项 | — | 五项决策结论留痕 CHANGELOG；让路顺序获主理人确认 | 【必需】 |
+| W-S0-2 | T-M0a-07 收尾：workBuddy 名核查（npm/域名/商标）+ 基准 D-23 回写 + bin 名终裁 | todo | W-S0-1 | G-M0a | 见 T-M0a-07 行；workBuddy 核查结论落 `docs/review/`；回写经主理人执行或授权 | 【必需】 |
+| W-S0-3 | 远程仓库与 CI 基线 | todo | W-S0-1 | — | GitHub 仓库建立；CI 云端首跑真实通过；分支保护开启 | 【必需】 |
+
+### S1 内核收尾（周六日间，G-M0b 准出）
+
+| ID | 任务 | 状态 | 前置 | 门禁 | 验收标准 | 必需性 |
+|---|---|---|---|---|---|---|
+| W-S1-1 | 派生状态版本 as_of + compare-and-set（=T-M0b-06） | todo | T-M0b-05 | G-M0b | 见 T-M0b-06 行 | 【必需】 |
+| W-S1-2 | 外部编辑检测 指纹 + observed_at（=T-M0b-07） | todo | T-M0a-04 | G-M0b | 见 T-M0b-07 行 | 【必需】 |
+| W-S1-3 | CLI 骨架 命令框架 + 五子命令占位（=T-M0b-08） | todo | T-M0b-01 | G-M0b | 见 T-M0b-08 行 | 【必需】 |
+| W-S1-4 | M0 门禁演练：三类合成样本回归（=T-M0b-09） | todo | T-M0b-01~07 | G-M0b | 见 T-M0b-09 行 | 【必需】 |
+| W-S1-5 | CP-2 门禁检查点：G-M0a / G-M0b DeepSeek 双轮审核 + 主理人开启 | todo | W-S0-3, W-S1-1~4 | — | 准出材料（脱敏 + token 预算标注）周六 17:00 前备齐；DeepSeek 轮 1 → 修复 → 轮 2，至多 2 轮；轮 2 无致命问题即审核通过、未关闭项入遗留清单（W-S5-3）；门禁由主理人人工开启并留痕——硬准出条件（任务 done/样本全过/CI 真实绿）与开启权不随授权转移 | 【必需】 |
+
+### S2 产品闭环垂直切面（周六夜–周日上午）
+
+| ID | 任务 | 状态 | 前置 | 门禁 | 验收标准 | 必需性 |
+|---|---|---|---|---|---|---|
+| W-S2-1 | 契约模板 v1 + `pm init` + 自举迁移启动（=T-M1-01） | todo | W-S1-3, W-S1-5 | G-M1 | 见 T-M1-01 行；两周度量降级为「启动 + 记录机制」，度量自 10-25 起算后补（诚实边界） | 【必需】 |
+| W-S2-2 | discover 预览 + adopt 收编 + .gatedeckignore（=T-M1-02） | todo | W-S1-3 | G-M1 | 见 T-M1-02 行 | 【必需】 |
+| W-S2-3 | canonical manifest 指纹（=T-M1-03，D-25） | todo | T-M0b-01 | G-M1 | 见 T-M1-03 行 | 【必需】 |
+| W-S2-4 | `pm gate check` 检查事实 + 凭证 + 失效判定（=T-M1-04） | todo | W-S2-3 | G-M1 | 见 T-M1-04 行 | 【必需】 |
+| W-S2-5 | TTY 三步 promote + B-12（=T-M1-05） | todo | W-S2-4 | G-M1 | 见 T-M1-05 行 | 【必需】 |
+| W-S2-6 | 总览墙 + 决策台四条规则，CLI 文本投影（=T-M1-06 + T-M1-09） | todo | T-M0a-05 | G-M1 | 见两原任务行；一页 Web（T-M1-10）后补，本包仅 CLI 投影并携带 as_of | 【必需】 |
+| W-S2-7 | `pm handoff` 交接包（=T-M1-07） | todo | T-M0b-06 | G-M1 | 见 T-M1-07 行 | 【必需】 |
+| W-S2-8 | 归因隐私最小落地核验（=T-M1-11） | todo | T-M0b-02 | G-M1 | 见 T-M1-11 行 | 【必需】 |
+
+### S3 workBuddy MCP 封装（周日下午）
+
+| ID | 任务 | 状态 | 前置 | 门禁 | 验收标准 | 必需性 |
+|---|---|---|---|---|---|---|
+| W-S3-1 | workBuddy MCP server 骨架：stdio 传输 + 工具注册框架 + core 装配 | todo | W-S2-1, W-S2-6 | G-M1 | 时钟/随机由壳层注入，core 纯度守卫不破；依赖选型 15 分钟时间盒（R6） | 【必需】 |
+| W-S3-2 | MOD-06 工具全集 15 个（=T-M1-08 主体） | todo | W-S3-1 | G-M1 | 读 7 + 写 3 + check_gate/request_promotion + record_note/submit_evidence/report_usage 全量可用；写操作全走 core 校验层；AI 动线（get_overview→领任务→update_task→check_gate→request_promotion）走通 | 【必需】 |
+| W-S3-3 | MCP 红线回归入 CI（=T-M1-08 验收子项） | todo | W-S3-2 | G-M1 | B-4（无 pass_gate / 无通用 append_changelog / MCP 不产生 authorization.granted）+ B-17（submit_evidence 仅待验）机器守卫入 CI | 【必需】 |
+| W-S3-4 | 一键接入体验：npx 冒烟 + 客户端配置指南 | todo | W-S3-2 | — | Claude Desktop / Cursor / ZCode 配置文档 + MCP inspector 冒烟脚本；价值准出 V1/V2 判据可复验 | 【必需】 |
+
+### S4 发布与价值包装（周日晚）
+
+| ID | 任务 | 状态 | 前置 | 门禁 | 验收标准 | 必需性 |
+|---|---|---|---|---|---|---|
+| W-S4-1 | 双语 README + 首屏素材（=T-M3-01 rc 适配） | todo | W-S2-6, W-S3-4 | G-M3 | 见 T-M3-01 行；rc 首屏素材=决策台 + workBuddy 接管演示（热力图后补）；999 元价值对照清单入 README | 【必需】 |
+| W-S4-2 | workBuddy 落地页 | todo | W-S4-1 | — | 痛点→方案→证明→价值锚点四段式；部署形式按 DP-4（推荐 GitHub Pages） | 【可让路①：README 承载】 |
+| W-S4-3 | 发布工程 + npm 0.1.0-rc.1（=T-M3-04 rc 适配） | todo | W-S4-1, W-S0-3 | G-M3 | LICENSE/CONTRIBUTING/SECURITY/issue 模板齐；CP-3 授权后发布（dist-tag `early`）；bin 名按 T-M0a-07 终裁（DP-1） | 【必需】 |
+| W-S4-4 | 社区发布：Show HN / V2EX / 掘金 / awesome-mcp-servers（=T-M3-06 rc 适配） | todo | W-S4-3 | G-M3 | 文案含 early access 诚实声明与后补清单；发帖链接留痕 | 【可让路②：延 1–2 日】 |
+| W-S4-5 | 上线验证与回滚演练 | todo | W-S4-3 | — | 干净环境 npx 安装冒烟 + MCP 接入冒烟（V1/V2 复验）+ npm deprecate 回滚路径演练记录 | 【必需】 |
+
+### S5 治理与保障（贯穿）
+
+| ID | 任务 | 状态 | 前置 | 门禁 | 验收标准 | 必需性 |
+|---|---|---|---|---|---|---|
+| W-S5-1 | 冲刺留痕同步（贯穿全程） | todo | — | — | 每 WP 完成即原任务状态迁移 + CHANGELOG 追加；状态只在原段落维护，不在本段双写 | 【必需】 |
+| W-S5-2 | 让路决策值守（贯穿全程） | todo | W-S0-1 | — | 阻塞发生按预定义让路顺序裁剪并 CHANGELOG 记录；不可让项不裁 | 【必需】 |
+| W-S5-3 | 门禁审核遗留清单值守（贯穿全程） | todo | W-S1-5 | — | 清单 `docs/review/WBS-W-门禁审核遗留清单.md` 逐项维护（问题 ID/来源门禁/轮次/分级/影响面/状态迁移留痕，轮次记录 append-only）；后续 WP 命中影响面 → 必须先修复并送 DeepSeek 重审，closed 后方可继续/验收；每轮审核 token 消耗按 T-M2a-05 契约字段手工留痕；冲刺收尾全量盘点并随 rc 诚实边界披露 | 【必需】 |
+
+**WBS-W 冲刺准出**：v0.1.0-rc.1 已发布且干净环境冒烟通过；workBuddy 十五工具可用且红线守卫入 CI；价值准出 V1~V6 全部可复验；全程留痕完整（W-05）。**本段所有工作包在 CP-1 拍板前置 todo，暂不认领。**
+
 ## 不进 WBS 的后置实验池（不承诺排期）
 
 健康分、时间机器回放、提案收件箱 + 反向 PM `draft_wbs`、可信审批模式（签名收据）、AI 身份档案与绩效视图、门禁配方生态、pre-push/CI 强约束、Backlog.md 导入、token 适配器扩展（社区 good first issue 池）。
@@ -134,5 +203,7 @@
 | 2026-10-20 | T-M0a-04 → done：收据链 + 本地锚点（`src/core/eventReceipt.ts` + 纯 SHA-256 `src/core/hash.ts`，20 用例含 node:crypto 对拍）；B-10/B-11/锚点缺失「来源未知」口径落地；定稿 `docs/design/事件来源收据机制定稿.md`；提交 b5f73c5。三项待过目项随 G-M0a 提请 | 夜间开发任务（AI） |
 | 2026-10-20 | T-M0a-05 → done：状态折叠投影（`src/core/stageFold.ts`，12 用例；B-16 按链序/B-13 幂等/非法跳跃拒绝/补偿走追加）；payload 契约为 M0a 提议；定稿 `docs/design/状态折叠规则定稿.md`；提交 8f8deeb。三项待过目项随 G-M0a 提请 | 夜间开发任务（AI） |
 | 2026-10-20 | T-M0a-06 → done：注册表 provider（`src/core/registry.ts`，12 用例；native append-only + registry.local locator 更新（B-14）+ projects-index 只读投影（D-30/B-15 API 形状保证））；定稿 `docs/design/注册表provider定稿.md`；提交 17c85c0。三项待过目项随 G-M0a 提请。本批 typecheck/lint/test（7 文件 85 用例）/build 全绿 | 夜间开发任务（AI） |
+| 2026-10-23 | 新增 **WBS-W 周末上线冲刺**段（S0~S5 共 27 工作包，全部 todo）：本周末（10-24/25）上线 gatedeck **v0.1.0-rc.1** + **workBuddy MCP 服务**（MOD-06 十五工具全集，新命名）；999 元定为价值准出锚（V1~V6）非 rc 期定价；诚实边界——G-M1 两周度量与 G-M3 外部验证物理上无法周末达成，正式 v0.1.0 按原门禁后补；三处主理人检查点（CP-1 决策 / CP-2 门禁 / CP-3 发布授权）；原任务状态仍在原段落维护。总计划 `docs/plans/WBS-W-周末上线冲刺计划.md`。**AI 起草，待 CP-1 拍板后开工** | 项目 AI（起草，主理人指令） |
+| 2026-10-23 | WBS-W 微调（**主理人授权 2026-10-23**，限本冲刺）：CP-2 门禁准出审核改为 **DeepSeek 模型双轮审核机制**——至多 2 轮、轮 2 复审后即通过；未关闭问题逐项入 `docs/review/WBS-W-门禁审核遗留清单.md`（轮次记录 append-only、状态迁移留痕）；后续 WP 命中清单影响面必须先修复并重新送审、closed 后方可继续。授权边界：仅替代 G-M0a/G-M0b「经主理人过目」环节，硬准出条件（必需任务 done/三类样本全过/CI 云端真实绿）与门禁开启动作不随授权转移（W-06）；正式 v0.1.0 前门禁回归基准原制度。审核 token 口径按项目既有设计：材料包按 `pm handoff` 软预算机制（估算/标字符数、超限提示不静默裁剪，B-8），每轮消耗按 T-M2a-05/MOD-08 契约字段手工留痕（无计量不猜）；材料脱敏 W-01/W-02 不豁免。同步：W-S1-5 验收标准更新；新增 W-S5-3 遗留清单值守（工作包计数 27→28）；排期 CP-2 调整为周六 17:00–19:00 | 主理人（授权）+ 项目 AI（落档） |
 
 <!-- 新 WBS 段落按「## WBS-{N} {段名}」追加，表结构保持一致 -->
