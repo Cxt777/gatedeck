@@ -37,11 +37,11 @@ describe('gatedeck CLI 命令框架（T-M0b-08 + T-M1 系列）', () => {
     }
   });
 
-  it('--version / -v → 输出版本，退出码 0', () => {
+  it('--version / -v → 输出版本（支持预发布后缀），退出码 0', () => {
     for (const argv of [['--version'], ['-v']]) {
       const { io, out } = captureIo();
       expect(runCli(argv, io)).toBe(0);
-      expect(out[0]).toMatch(/^\d+\.\d+\.\d+/);
+      expect(out[0]).toMatch(/^\d+\.\d+\.\d+(-[0-9A-Za-z.]+)?$/); // 如 0.1.0-rc.1
     }
   });
 
