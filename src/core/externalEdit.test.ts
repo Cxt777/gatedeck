@@ -35,12 +35,13 @@ describe('observeExternalEdit（指纹比对 + observed_at）', () => {
     expect(obs.intermediateUnknown).toBe(true); // 中间过程不可观察，标未知
   });
 
-  it('未变化：字节一致 → unchanged，指纹相同', () => {
+  it('未变化：字节一致 → unchanged，指纹相同；中间过程仍不可观察（评审中·1 闭环）', () => {
     const baseline = nextBaseline('pm/changelog.md', DOC_A).fingerprint;
     const obs = observeExternalEdit({ path: 'pm/changelog.md', baseline, currentContent: DOC_A, observedAt: T1 });
     expect(obs.status).toBe('unchanged');
     expect(obs.current.contentHash).toBe(obs.baseline!.contentHash);
-    expect(obs.intermediateUnknown).toBe(false);
+    // unchanged 只证明端点一致，不主张「期间未变」：intermediateUnknown 恒 true（P-08）
+    expect(obs.intermediateUnknown).toBe(true);
   });
 
   it('仅换行差异（LF→CRLF）即判定变更（字节级指纹，不做归一化）', () => {
@@ -55,12 +56,26 @@ describe('observeExternalEdit（指纹比对 + observed_at）', () => {
     expect(obs.status).toBe('external-change');
   });
 
-  it('P-08 无基线不编造：untracked 如实标注，不声称 external', () => {
+  it('P-08 无基线不编造：untracked 如实标注，不声称 external；观察前历史不可观察', () => {
     const obs = observeExternalEdit({ path: 'pm/project.md', baseline: null, currentContent: DOC_B, observedAt: T1 });
     expect(obs.status).toBe('untracked');
     expect(obs.baseline).toBeNull();
-    expect(obs.intermediateUnknown).toBe(false);
+    expect(obs.intermediateUnknown).toBe(true); // 无基线：观察之前的历史完全不可观察（评审中·1 闭环）
     expect(JSON.stringify(obs)).not.toContain('external');
+  });
+
+  it('评审中·1 语义锁：三种观察状态 intermediateUnknown 恒为 true，「有无差异」只由 status 区分', () => {
+    const baseline = nextBaseline('pm/wbs.md', DOC_A).fingerprint;
+    const unchanged = observeExternalEdit({ path: 'pm/wbs.md', baseline, currentContent: DOC_A, observedAt: T1 });
+    const changed = observeExternalEdit({ path: 'pm/wbs.md', baseline, currentContent: DOC_B, observedAt: T1 });
+    const untracked = observeExternalEdit({ path: 'pm/wbs.md', baseline: null, currentContent: DOC_B, observedAt: T1 });
+    expect(unchanged.intermediateUnknown).toBe(true);
+    expect(changed.intermediateUnknown).toBe(true);
+    expect(untracked.intermediateUnknown).toBe(true);
+    // 差异与否不由该字段承载
+    expect(unchanged.status).toBe('unchanged');
+    expect(changed.status).toBe('external-change');
+    expect(untracked.status).toBe('untracked');
   });
 
   it('P-08 结构性保证：观察结果只有 observedAt，没有任何 occurredAt 字段（不回填发生时间）', () => {

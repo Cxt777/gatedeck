@@ -8,9 +8,11 @@
  *  - **外部修改只记 observed_at，不回填 occurred_at**（P-08/基准 3.3）：外部改动
  *    何时发生不可观测——ExternalObservation 结构上只有 observedAt 字段、没有
  *    occurredAt，调用方想伪造发生时间也无字段可填（结构性保证，非口头约定）；
- *  - **观察不到的中间过程标未知**（P-08/基准 3.3）：基线到本次观察之间发生了
- *    几次编辑、经过哪些中间状态不可知——external-change 观察一律
- *    intermediateUnknown=true，绝不补插中间历史；
+ *  - **观察不到的中间过程标未知**（P-08/基准 3.3；评审中·1 闭环）：基线到本次观察之间
+ *    发生了几次编辑、经过哪些中间状态不可知——本内核的三种观察状态（unchanged /
+ *    external-change / untracked）**全部无法观察中间过程**，故 intermediateUnknown
+ *    恒为 true，「有无差异」由 status 区分，字段不再对 unchanged/untracked 声称
+ *    「中间过程已知」；绝不补插中间历史；
  *  - 无基线（首次观察/未纳管）→ untracked：如实标注无从判定，不声称 external；
  *  - unchanged 只证明当前字节与基线一致，不证明期间未被改过又改回——该残余
  *    未知不升级为告警，由本口径承载，不伪造「期间未变」的断言；
@@ -53,7 +55,12 @@ export interface ExternalObservation {
   baseline: ContentVersion | null;
   /** 本次观察到的当前指纹 */
   current: ContentVersion;
-  /** true = 基线与本观察之间的中间过程不可观察（P-08：中间历史标未知，不补插） */
+  /**
+   * true = 基线与本观察之间的中间过程不可观察（P-08：中间历史标未知，不补插）。
+   * 本内核三种观察状态均无法观察中间过程：unchanged 只证明端点一致（可能改过又改回）、
+   * external-change 只见端点差异、untracked 无基线无从谈起——故恒为 true；
+   * 「有无差异」由 status 区分。仅当未来壳层具备连续观察流时才可能置 false。
+   */
   intermediateUnknown: boolean;
 }
 
@@ -79,7 +86,8 @@ export function observeExternalEdit(input: {
       observedAt: input.observedAt,
       baseline: null,
       current,
-      intermediateUnknown: false,
+      // 无基线：观察之前的历史完全不可观察（评审中·1 闭环：不再置 false）
+      intermediateUnknown: true,
     };
   }
   if (input.baseline.contentHash === current.contentHash) {
@@ -89,9 +97,9 @@ export function observeExternalEdit(input: {
       observedAt: input.observedAt,
       baseline: input.baseline,
       current,
-      // 端点一致不主张「期间未变」（改过又改回不可观察）；该残余未知由模块头注释
-      // 与展示层文案承载，不置 intermediateUnknown 以免与 external-change 语义混同。
-      intermediateUnknown: false,
+      // 端点一致不主张「期间未变」（可能改过又改回，中间过程不可观察）——
+      // 评审中·1 闭环：intermediateUnknown 恒为 true，「有无差异」由 status 区分（P-08）。
+      intermediateUnknown: true,
     };
   }
   return {
