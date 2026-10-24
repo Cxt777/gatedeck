@@ -7,7 +7,8 @@
   "license": "MIT",
   "bin": {
     "gatedeck": "dist/cli/index.js",
-    "pm": "dist/cli/index.js"
+    "pm": "dist/cli/index.js",
+    "gatedeck-mcp": "dist/mcp/server.js"
   },
   "engines": {
     "node": ">=22"

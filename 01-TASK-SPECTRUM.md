@@ -50,7 +50,7 @@
 | T-M0b-06 | 派生状态版本（as_of + compare-and-set） | done | T-M0b-05 | G-M0b | 决策台/风险分组/handoff 携带 as_of/源版本；过期投影提交被拒 | 【必需】 |
 | T-M0b-07 | 外部编辑检测（指纹比对 + observed_at） | done | T-M0a-04 | G-M0b | 受管写路径外的内容变更可检测；外部修改只记 observed_at 不回填 occurred_at；观察不到的中间过程标未知 | 【必需】 |
 | T-M0b-08 | CLI 骨架 | done | T-M0b-01 | G-M0b | `pm` 命令框架 + `init/discover/adopt/register/ls` 子命令占位与帮助；discover/ls 纯只读 | 【必需】 |
-| T-M0b-09 | M0 门禁演练：合成样本回归 | todo | T-M0b-01~07 | G-M0b | 保真/并发/中断三类合成样本全过；B-10/B-11 收据口径入 CI；CI 绿 | 【必需】 |
+| T-M0b-09 | M0 门禁演练：合成样本回归 | done | T-M0b-01~07 | G-M0b | 保真/并发/中断三类合成样本全过；B-10/B-11 收据口径入 CI；CI 绿（2026-10-24 完成：`src/core/m0Drill.test.ts` 25 用例全过随 CI 运行；全量 24 文件 370 用例绿；提交 b716601） | 【必需】 |
 
 **G-M0b 准出**：M0b 全部必需任务 done；三类合成样本全过；CI 绿。
 
@@ -58,17 +58,17 @@
 
 | ID | 任务 | 状态 | 前置 | 门禁 | 验收标准 | 必需性 |
 |---|---|---|---|---|---|---|
-| T-M1-01 | 契约模板 v1 + `pm init` | todo | T-M0b-01 | G-M1 | 生成 project.md/wbs.md/gates.md/changelog.md/insights.md 骨架；模板内容对齐基准第五节契约；本 WBS 迁移为首个 `pm/wbs.md`（dogfooding） | 【必需】 |
-| T-M1-02 | 最小注册：discover 预览 + adopt 收编 | todo | T-M0b-08, T-M0a-06 | G-M1 | discover 只读预览不执行任何命令不入册（B-7）；adopt 显式收编；路径失效显示「离线」不静默移除；.gatedeckignore 生效 | 【必需】 |
-| T-M1-03 | canonical manifest 指纹（D-25） | todo | T-M0b-01 | G-M1 | 纳入被检文件（含未提交 diff）/规则文件/引用脚本/runner 配置；排除 changelog 自身/缓存/构建产物；凭证存 subject_manifest_hash | 【必需】 |
-| T-M1-04 | `pm gate check`：检查事实 + 凭证 + 失效判定 | todo | T-M1-03 | G-M1 | 产出检查事实（未检查/通过/失败/错误/待复验）；命令执行受 P-07/D-26 约束（信任绑定 manifest+runner，证据只存退出码/时长/摘要）；对象或规则变化 → 待复验（B-3） | 【必需】 |
-| T-M1-05 | 本地交互确认（TTY 三步编排） | todo | T-M1-04 | G-M1 | request_promotion→confirm_promotion→apply_promotion；`pm promote` 交互逐条确认，非交互拒绝；事件 authorization.locally_confirmed，只写不透明 principal/session id；B-12 过 | 【必需】 |
-| T-M1-06 | 当前阶段派生接入总览 | todo | T-M0a-05 | G-M1 | 总览墙阶段进度来自事件折叠投影；携带 as_of | 【必需】 |
-| T-M1-07 | `pm handoff` 交接包（含 revive 别名） | todo | T-M0b-06 | G-M1 | 六段结构（目标范围/适用规则/依赖决定/有效失效证据/已试败路径/下一步验收）；携带源版本+生成时间；软预算超限明确提示不静默裁剪（B-8）；token 数估算或标字符数 | 【必需】 |
-| T-M1-08 | MCP 通道 | todo | T-M1-04, T-M1-05 | G-M1 | tools 对齐基准 MOD-06：读 7 + 写 3 + check_gate/request_promotion/record_note/submit_evidence/report_usage；**无 pass_gate、无 append_changelog**；MCP 不可生成 authorization.granted（B-4）；submit_evidence 不改检查事实（B-17）；report_usage 携带归因 | 【必需】 |
-| T-M1-09 | 决策台查询规则（M1 四条） | todo | T-M1-06 | G-M1 | ① 待验收门禁/待审申请→等您决定；② blocked→需要关注；③ 证据过期/待复验→需要关注；④ 可领取任务→可以推进；共用查询规则层供 brief 复用 | 【必需】 |
+| T-M1-01 | 契约模板 v1 + `pm init` | doing | T-M0b-01 | G-M1 | 生成 project.md/wbs.md/gates.md/changelog.md/insights.md 骨架；模板内容对齐基准第五节契约；本 WBS 迁移为首个 `pm/wbs.md`（dogfooding）（2026-10-24：模板+init 命令+测试+冒烟完成提交 b716601；**dogfooding 迁移待执行**，随后补） | 【必需】 |
+| T-M1-02 | 最小注册：discover 预览 + adopt 收编 | done | T-M0b-08, T-M0a-06 | G-M1 | discover 只读预览不执行任何命令不入册（B-7）；adopt 显式收编；路径失效显示「离线」不静默移除；.gatedeckignore 生效（2026-10-24 完成：discover/adopt 真实现 + discoverRules 14 用例；register/ls 维持占位不阻塞本项验收） | 【必需】 |
+| T-M1-03 | canonical manifest 指纹（D-25） | done | T-M0b-01 | G-M1 | 纳入被检文件（含未提交 diff）/规则文件/引用脚本/runner 配置；排除 changelog 自身/缓存/构建产物；凭证存 subject_manifest_hash（2026-10-24 完成：manifestFingerprint 18 用例，提交 b716601） | 【必需】 |
+| T-M1-04 | `pm gate check`：检查事实 + 凭证 + 失效判定 | doing | T-M1-03 | G-M1 | 产出检查事实（未检查/通过/失败/错误/待复验）；命令执行受 P-07/D-26 约束（信任绑定 manifest+runner，证据只存退出码/时长/摘要）；对象或规则变化 → 待复验（B-3）（2026-10-24：core checkFacts 15 用例完成；CLI `gate check` 命令装配待做） | 【必需】 |
+| T-M1-05 | 本地交互确认（TTY 三步编排） | doing | T-M1-04 | G-M1 | request_promotion→confirm_promotion→apply_promotion；`pm promote` 交互逐条确认，非交互拒绝；事件 authorization.locally_confirmed，只写不透明 principal/session id；B-12 过（2026-10-24：core promotionFlow 22 用例含 B-12 完成；TTY `pm promote` 命令装配待做） | 【必需】 |
+| T-M1-06 | 当前阶段派生接入总览 | done | T-M0a-05 | G-M1 | 总览墙阶段进度来自事件折叠投影；携带 as_of（2026-10-24 完成：`gatedeck deck` 命令，提交 b716601） | 【必需】 |
+| T-M1-07 | `pm handoff` 交接包（含 revive 别名） | done | T-M0b-06 | G-M1 | 六段结构（目标范围/适用规则/依赖决定/有效失效证据/已试败路径/下一步验收）；携带源版本+生成时间；软预算超限明确提示不静默裁剪（B-8）；token 数估算或标字符数（2026-10-24 完成：handoffCompose + `gatedeck handoff`/revive，提交 b716601） | 【必需】 |
+| T-M1-08 | MCP 通道 | doing | T-M1-04, T-M1-05 | G-M1 | tools 对齐基准 MOD-06：读 7 + 写 3 + check_gate/request_promotion/record_note/submit_evidence/report_usage；**无 pass_gate、无 append_changelog**；MCP 不可生成 authorization.granted（B-4）；submit_evidence 不改检查事实（B-17）；report_usage 携带归因（2026-10-24：S3 工作流进行中——SDK 装配/十五工具/B-4+B-17 守卫） | 【必需】 |
+| T-M1-09 | 决策台查询规则（M1 四条） | done | T-M1-06 | G-M1 | ① 待验收门禁/待审申请→等您决定；② blocked→需要关注；③ 证据过期/待复验→需要关注；④ 可领取任务→可以推进；共用查询规则层供 brief 复用（2026-10-24 完成：decisionBoard 21 用例，提交 b716601） | 【必需】 |
 | T-M1-10 | 一页 Web：项目列表 + 决策台 + 证据面板 | todo | T-M1-09 | G-M1 | 三区（等您决定/可以推进/需要关注）每卡含触发原因/证据/影响/动作；显式提交（无拖拽）；打开 1 分钟内找到最重要待办并能解释原因；只读投影+显式写回 | 【必需】 |
-| T-M1-11 | 归因隐私落地 | todo | T-M0b-02 | G-M1 | actor_id/session_id 为本地不透明随机 ID；不记邮箱/用户名/对话文本；不作身份认证 | 【必需】 |
+| T-M1-11 | 归因隐私落地 | done | T-M0b-02 | G-M1 | actor_id/session_id 为本地不透明随机 ID；不记邮箱/用户名/对话文本；不作身份认证（2026-10-24 完成：actorPrivacy 8+ 用例 + 隐私泄露扫描，提交 b716601） | 【必需】 |
 | T-M1-12 | 自举接入（dogfooding 2 周） | todo | T-M1-01, T-M1-02 | G-M1 | 本工作区多项目接入（经 projects-index provider）；记录三项度量：找下一事项耗时/新会话人工纠正次数/证据不足过期发现次数 | 【必需】 |
 | T-M1-13 | 阶段进度组件（地铁图形态） | todo | T-M1-06 | G-M1 | 静态站点图、非独立页面、无动态布局引擎；作为总览页内组件渲染 | 【条件性】 |
 
@@ -142,36 +142,36 @@
 
 | ID | 任务 | 状态 | 前置 | 门禁 | 验收标准 | 必需性 |
 |---|---|---|---|---|---|---|
-| W-S1-4 | M0 门禁演练：三类合成样本回归（=T-M0b-09） | todo | T-M0b-01~07 | G-M0b | 见 T-M0b-09 行 | 【必需】 |
+| W-S1-4 | M0 门禁演练：三类合成样本回归（=T-M0b-09） | done | T-M0b-01~07 | G-M0b | 见 T-M0b-09 行（2026-10-24 done，25 用例） | 【必需】 |
 | W-S1-5 | CP-2 门禁检查点：G-M0a / G-M0b DeepSeek 双轮审核 + 主理人开启 | todo | W-S0-3, W-S1-1~4 | — | 准出材料（脱敏 + token 预算标注）周六 17:00 前备齐；DeepSeek 轮 1 → 修复 → 轮 2，至多 2 轮；轮 2 无致命问题即审核通过、未关闭项入遗留清单（W-S5-3）；门禁由主理人人工开启并留痕——硬准出条件（任务 done/样本全过/CI 真实绿）与开启权不随授权转移 | 【必需】 |
 
 ### S2 产品闭环垂直切面（周六夜–周日上午）
 
 | ID | 任务 | 状态 | 前置 | 门禁 | 验收标准 | 必需性 |
 |---|---|---|---|---|---|---|
-| W-S2-1 | 契约模板 v1 + `pm init` + 自举迁移启动（=T-M1-01） | todo | W-S1-3, W-S1-5 | G-M1 | 见 T-M1-01 行；两周度量降级为「启动 + 记录机制」，度量自 10-25 起算后补（诚实边界） | 【必需】 |
-| W-S2-2 | discover 预览 + adopt 收编 + .gatedeckignore（=T-M1-02） | todo | W-S1-3 | G-M1 | 见 T-M1-02 行 | 【必需】 |
-| W-S2-3 | canonical manifest 指纹（=T-M1-03，D-25） | todo | T-M0b-01 | G-M1 | 见 T-M1-03 行 | 【必需】 |
-| W-S2-4 | `pm gate check` 检查事实 + 凭证 + 失效判定（=T-M1-04） | todo | W-S2-3 | G-M1 | 见 T-M1-04 行 | 【必需】 |
-| W-S2-5 | TTY 三步 promote + B-12（=T-M1-05） | todo | W-S2-4 | G-M1 | 见 T-M1-05 行 | 【必需】 |
-| W-S2-6 | 总览墙 + 决策台四条规则，CLI 文本投影（=T-M1-06 + T-M1-09） | todo | T-M0a-05 | G-M1 | 见两原任务行；一页 Web（T-M1-10）后补，本包仅 CLI 投影并携带 as_of | 【必需】 |
-| W-S2-7 | `pm handoff` 交接包（=T-M1-07） | todo | T-M0b-06 | G-M1 | 见 T-M1-07 行 | 【必需】 |
-| W-S2-8 | 归因隐私最小落地核验（=T-M1-11） | todo | T-M0b-02 | G-M1 | 见 T-M1-11 行 | 【必需】 |
+| W-S2-1 | 契约模板 v1 + `pm init` + 自举迁移启动（=T-M1-01） | doing | W-S1-3, W-S1-5 | G-M1 | 见 T-M1-01 行；两周度量降级为「启动 + 记录机制」，度量自 10-25 起算后补（诚实边界）（2026-10-24：模板+init done，dogfooding 迁移待执行；度量记录机制待建） | 【必需】 |
+| W-S2-2 | discover 预览 + adopt 收编 + .gatedeckignore（=T-M1-02） | done | W-S1-3 | G-M1 | 见 T-M1-02 行（2026-10-24 done） | 【必需】 |
+| W-S2-3 | canonical manifest 指纹（=T-M1-03，D-25） | done | T-M0b-01 | G-M1 | 见 T-M1-03 行（2026-10-24 done） | 【必需】 |
+| W-S2-4 | `pm gate check` 检查事实 + 凭证 + 失效判定（=T-M1-04） | doing | W-S2-3 | G-M1 | 见 T-M1-04 行（2026-10-24：core 完成，CLI 装配待做） | 【必需】 |
+| W-S2-5 | TTY 三步 promote + B-12（=T-M1-05） | doing | W-S2-4 | G-M1 | 见 T-M1-05 行（2026-10-24：core 完成，TTY 装配待做） | 【必需】 |
+| W-S2-6 | 总览墙 + 决策台四条规则，CLI 文本投影（=T-M1-06 + T-M1-09） | done | T-M0a-05 | G-M1 | 见两原任务行；一页 Web（T-M1-10）后补，本包仅 CLI 投影并携带 as_of（2026-10-24 done：deck 命令） | 【必需】 |
+| W-S2-7 | `pm handoff` 交接包（=T-M1-07） | done | T-M0b-06 | G-M1 | 见 T-M1-07 行（2026-10-24 done） | 【必需】 |
+| W-S2-8 | 归因隐私最小落地核验（=T-M1-11） | done | T-M0b-02 | G-M1 | 见 T-M1-11 行（2026-10-24 done） | 【必需】 |
 
 ### S3 gatedeck-mcp MCP 封装（周日下午）
 
 | ID | 任务 | 状态 | 前置 | 门禁 | 验收标准 | 必需性 |
 |---|---|---|---|---|---|---|
-| W-S3-1 | gatedeck-mcp MCP server 骨架：stdio 传输 + 工具注册框架 + core 装配 | todo | W-S2-1, W-S2-6 | G-M1 | 时钟/随机由壳层注入，core 纯度守卫不破；依赖选型 15 分钟时间盒（R6） | 【必需】 |
-| W-S3-2 | MOD-06 工具全集 15 个（=T-M1-08 主体） | todo | W-S3-1 | G-M1 | 读 7 + 写 3 + check_gate/request_promotion + record_note/submit_evidence/report_usage 全量可用；写操作全走 core 校验层；AI 动线（get_overview→领任务→update_task→check_gate→request_promotion）走通 | 【必需】 |
-| W-S3-3 | MCP 红线回归入 CI（=T-M1-08 验收子项） | todo | W-S3-2 | G-M1 | B-4（无 pass_gate / 无通用 append_changelog / MCP 不产生 authorization.granted）+ B-17（submit_evidence 仅待验）机器守卫入 CI | 【必需】 |
+| W-S3-1 | gatedeck-mcp MCP server 骨架：stdio 传输 + 工具注册框架 + core 装配 | doing | W-S2-1, W-S2-6 | G-M1 | 时钟/随机由壳层注入，core 纯度守卫不破；依赖选型 15 分钟时间盒（R6）——**裁定：官方 @modelcontextprotocol/sdk@1.32.2 + zod 直接依赖（2026-10-24）**；S3 工作流进行中 | 【必需】 |
+| W-S3-2 | MOD-06 工具全集 15 个（=T-M1-08 主体） | doing | W-S3-1 | G-M1 | 读 7 + 写 3 + check_gate/request_promotion + record_note/submit_evidence/report_usage 全量可用；写操作全走 core 校验层；AI 动线（get_overview→领任务→update_task→check_gate→request_promotion）走通（2026-10-24：S3 工作流进行中；安全裁定——MCP check_gate 只做检查事实与失效判定，永不执行门禁命令） | 【必需】 |
+| W-S3-3 | MCP 红线回归入 CI（=T-M1-08 验收子项） | doing | W-S3-2 | G-M1 | B-4（无 pass_gate / 无通用 append_changelog / MCP 不产生 authorization.granted）+ B-17（submit_evidence 仅待验）机器守卫入 CI（2026-10-24：随 S3 工作流，allowlist.test.ts + assertAllowlist 结构守卫设计就位） | 【必需】 |
 | W-S3-4 | 一键接入体验：npx 冒烟 + 客户端配置指南 | todo | W-S3-2 | — | Claude Desktop / Cursor / ZCode 配置文档 + MCP inspector 冒烟脚本；价值准出 V1/V2 判据可复验 | 【必需】 |
 
 ### S4 发布与价值包装（周日晚）
 
 | ID | 任务 | 状态 | 前置 | 门禁 | 验收标准 | 必需性 |
 |---|---|---|---|---|---|---|
-| W-S4-1 | 双语 README + 首屏素材（=T-M3-01 rc 适配） | todo | W-S2-6, W-S3-4 | G-M3 | 见 T-M3-01 行；rc 首屏素材=决策台 + workBuddy 接管演示（热力图后补）；999 元价值对照清单入 README | 【必需】 |
+| W-S4-1 | 双语 README + 首屏素材（=T-M3-01 rc 适配） | doing | W-S2-6, W-S3-4 | G-M3 | 见 T-M3-01 行；rc 首屏素材=决策台 + gatedeck-mcp 接管演示（热力图后补）；999 元价值对照清单入 README（2026-10-24：README/README.en + community files 主体完成提交 205325b；首屏素材与 MCP 配置段待 S3 完成后补） | 【必需】 |
 | W-S4-2 | gatedeck-mcp 落地页 | todo | W-S4-1 | — | 痛点→方案→证明→价值锚点四段式；部署形式按 DP-4（推荐 GitHub Pages） | 【可让路①：README 承载】 |
 | W-S4-3 | 发布工程 + npm 0.1.0-rc.1（=T-M3-04 rc 适配） | todo | W-S4-1, W-S0-3 | G-M3 | LICENSE/CONTRIBUTING/SECURITY/issue 模板齐；CP-3 授权后发布（dist-tag `early`）；bin 名按 T-M0a-07 终裁（DP-1） | 【必需】 |
 | W-S4-4 | 社区发布：Show HN / V2EX / 掘金 / awesome-mcp-servers（=T-M3-06 rc 适配） | todo | W-S4-3 | G-M3 | 文案含 early access 诚实声明与后补清单；发帖链接留痕 | 【可让路②：延 1–2 日】 |
@@ -208,6 +208,7 @@
 | 2026-10-23 | **CP-1 依预授权完成拍板**（主理人 2026-10-23 晚预授权：冲刺期合理授权免确认、超 10 分钟无回应按推荐继续、不得影响进度；资源规则 GLM-5.3 拆解 + GLM-5.3-Flash 执行子任务、免费计划额度优先耗尽后可用个人额度）：DP-1 单包 `gatedeck` 三 bin（`gatedeck`/`pm`/`gatedeck-mcp`）；DP-2 rc 期开源免费 + README 999 元价值对照清单（商业形式另行立项）；DP-3 让路顺序按计划第 6 节预定义；DP-4 GitHub 公开仓库 + GitHub Pages + npm；DP-5 `0.1.0-rc.1` + dist-tag `early` + git tag `v0.1.0-rc.1`。冲刺范围冻结。**W-S0-1 → done**。主理人可否决任一项，否决后受影响 WP 重跑 | 主理人（预授权）+ 项目 AI（落痕） |
 | 2026-10-23 | **弃用对外服务名 workBuddy**（主理人情报：腾讯 WorkBuddy 为在营 agent 产品，R2 商标混淆；AI 核实属实，workbuddy.ai + 腾讯云企业版）：**定名 `gatedeck-mcp`**（npm 404 可注册；备选 firstmate 可注册保留；deckhand 已被占用）。WBS-W 段活文档同步更新（段首/S0 表/S3 段名/S4 表/准出行），历史留痕条目按 W-05 不回改；总计划按 append-only 以文末修订记录承载。**W-S0-2 → doing** | 主理人（情报）+ 项目 AI（核实与裁定） |
 | 2026-10-23 | T-M0a-07 → done、**W-S0-2 → done**：第二轮核查落 docs/review/T-M0a-07 报告第四节；外部基准 D-23 回写已执行（终核增注 + MCP 服务名终裁增订 + 开放问题 6 闭环）；本项目基准第七节命名契约更新为 bin 三注册终裁（gatedeck/pm/gatedeck-mcp）。回写依主理人冲刺预授权 AI 代笔，CHANGELOG 23:30 留痕 | 项目 AI（依预授权代笔） |
+| 2026-10-24 | T-M0b-09 → done、**W-S1-4 → done**：m0Drill 25 用例（保真/并发/中断三类合成样本 + B-10/B-11 入 CI）；T-M1-02/03/06/07/09/11 → done（discover+adopt+ignore / manifestFingerprint 18 用例 / deck 总览 / handoff 六段 / decisionBoard 21 用例 / actorPrivacy）；T-M1-01/04/05/08 → doing（模板+init 代码完成待 dogfooding 迁移 / checkFacts+promotionFlow core 完成待 CLI 装配 / S3 MCP 进行中）；**W-S2-2/3/6/7/8 → done、W-S2-1/4/5 与 W-S3-1~3 → doing、W-S4-1 → doing**。全量 24 文件 370 用例绿；提交 b716601（代码）+ 205325b（文档）。双源产出：夜间开发任务（AI）主体 + 主会话 Flash 工作流（checkFacts/promotionFlow）与测试适配。**G-M0b 硬准出条件全部满足**（M0b 9/9 done + 三类样本全过 + B-10/B-11 入 CI + CI 绿——含云端），待 CP-2 双轮审核后依预授权开启门禁 | 项目 AI（主会话整合验收） |
 | 2026-10-23 | T-M0b-06 → done：派生状态版本（`src/core/derivedVersion.ts`，10 用例；DerivedVersion/versionOf/formatVersion + checkFreshSubmission 版本 compare-and-set，四类拒绝码 stale-projection/version-ahead/as-of-mismatch/invalid-version，过期投影提交被拒；含与 stageFold 折叠输出端到端），提交 13ee2f7；计划日志 docs/plans/T-M0b-06-派生状态版本.md | 夜间开发任务（AI） |
 | 2026-10-23 | T-M0b-07 → done：外部编辑检测（`src/core/externalEdit.ts`，12 用例；nextBaseline 与 optimisticWrite 同源指纹、observeExternalEdit 三态、ExternalObservation 结构上无 occurredAt 字段（P-08 只记 observed_at 不回填）、external-change 恒 intermediateUnknown=true、summarizeExternalScan 不静默；B-2 竞争场景入 CI 回归），提交 9e93c14；计划日志 docs/plans/T-M0b-07-外部编辑检测.md | 夜间开发任务（AI） |
 | 2026-10-23 | T-M0b-08 → done：CLI 骨架（重写 `src/cli/index.ts`，9 用例 + dist 冒烟；五子命令注册表 init/discover/adopt/register/ls 含 readOnly 标注、runCli 可注入 IO、直接执行守卫；占位执行退出码 2 明示未实现零副作用（W-06）；discover/ls 纯只读 B-7 前置），提交 4a0396e；计划日志 docs/plans/T-M0b-08-CLI骨架.md。本批全量 lint/typecheck/test（15 文件 208 用例）/build 全绿；WBS-W 段 W-S1-1~3（= 本三任务）按「状态只在原段落维护，不在本段双写」规则不另迁移 | 夜间开发任务（AI） |
