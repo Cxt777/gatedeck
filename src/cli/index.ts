@@ -11,7 +11,11 @@
  *  - gatedeck-mcp 第三 bin 为 WBS-W S3 冲刺任务（DP-1 终裁），不在本任务范围。
  */
 import { pathToFileURL } from 'node:url';
+import { createRequire } from 'node:module';
 import { CORE_VERSION } from '../core/index.js';
+
+/** 包版本（package.json version；--version 展示口径）；CORE_VERSION 为 core 内核协议版本 */
+const PACKAGE_VERSION: string = createRequire(import.meta.url)('../../package.json').version ?? CORE_VERSION;
 import { runAdopt } from './commands/adopt.js';
 import { runDeck } from './commands/deck.js';
 import { runDiscover } from './commands/discover.js';
@@ -113,7 +117,7 @@ function run(argv: readonly string[], io: CliIo): number {
   }
 
   if (command === '--version' || command === '-v') {
-    io.out(CORE_VERSION);
+    io.out(PACKAGE_VERSION);
     return 0;
   }
 

@@ -1,10 +1,10 @@
 {
   "name": "gatedeck",
-  "version": "0.0.0",
-  "private": true,
-  "description": "一休PM（Gatedeck）· 决策台优先、证据可校验的本地项目管理工具",
+  "version": "0.1.0-rc.1",
+  "description": "一休PM（Gatedeck）· 决策台优先、证据可校验的本地项目管理工具 — Know what's next. Prove what's done.",
   "type": "module",
   "license": "MIT",
+  "private": false,
   "bin": {
     "gatedeck": "dist/cli/index.js",
     "pm": "dist/cli/index.js",
@@ -16,12 +16,37 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "tag": "early",
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cxt777/gatedeck.git"
+  },
+  "homepage": "https://github.com/Cxt777/gatedeck#readme",
+  "bugs": {
+    "url": "https://github.com/Cxt777/gatedeck/issues"
+  },
+  "keywords": [
+    "pm",
+    "project-management",
+    "decision-deck",
+    "mcp",
+    "mcp-server",
+    "ai-tools",
+    "local-first",
+    "markdown",
+    "evidence-based",
+    "solo-dev"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint .",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "prepublishOnly": "pnpm lint && pnpm typecheck && pnpm test && pnpm build"
   },
   "devDependencies": {
     "@eslint/js": "^9.14.0",
