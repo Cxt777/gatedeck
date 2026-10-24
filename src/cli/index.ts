@@ -3,14 +3,20 @@
  * gatedeck CLI（T-M0b-08）：`gatedeck` / `pm` 双 bin 命令框架 + 五子命令占位与帮助。
  *
  * 分层约定：本层为「壳」，允许 IO（文件系统/终端）；判定与推导逻辑一律下沉 core。
- *  - init / adopt / register：写路径占位，随 T-M1-01 / T-M1-02 落地；
- *  - discover / ls：**纯只读**占位——骨架期连读也不做（零文件访问），只输出命令契约
- *    与只读承诺，确保「discover/ls 纯只读」从骨架期就成立（B-7 前置）；
+ *  - init：写路径已落地（T-M1-01，R-06 不覆盖）；adopt：写路径已落地（T-M1-02，显式收编）；
+ *    register：写路径占位，随 T-M1-02 后续落地；
+ *  - discover：**纯只读**真实现（T-M1-02）——零写动作，不执行命令、不入册、不改文件（B-7）；
+ *    ls：仍为**纯只读**占位（「discover/ls 纯只读」自骨架期成立，B-7）；
  *  - 占位命令执行一律退出码 2 并明示未实现：脚本不得把「无效果」当成功（W-06）；
  *  - gatedeck-mcp 第三 bin 为 WBS-W S3 冲刺任务（DP-1 终裁），不在本任务范围。
  */
 import { pathToFileURL } from 'node:url';
 import { CORE_VERSION } from '../core/index.js';
+import { runAdopt } from './commands/adopt.js';
+import { runDeck } from './commands/deck.js';
+import { runDiscover } from './commands/discover.js';
+import { runHandoff } from './commands/handoff.js';
+import { runInit } from './commands/init.js';
 
 /** 可注入终端 IO（测试零侵入；默认 console） */
 export interface CliIo {
@@ -34,21 +40,21 @@ export interface CommandSpec {
 export const COMMANDS: readonly CommandSpec[] = [
   {
     name: 'init',
-    summary: '在当前目录初始化 pm/ 契约文件骨架（project/wbs/gates/changelog/insights）',
-    usage: 'gatedeck init',
+    summary: '在当前目录初始化 pm/ 契约文件骨架（project/wbs/gates/changelog/insights；R-06 不覆盖，已存在即拒绝）',
+    usage: 'gatedeck init [--name <名>] [--slug <slug>] [--stage <初始阶段>]',
     lands: 'T-M1-01',
     readOnly: false,
   },
   {
     name: 'discover',
-    summary: '只读扫描工作区候选项目并预览（不执行命令、不入册，B-7）',
+    summary: '只读扫描工作区候选项目并预览（.gatedeckignore 生效；不执行命令、不入册、不写文件，B-7）',
     usage: 'gatedeck discover',
     lands: 'T-M1-02',
     readOnly: true,
   },
   {
     name: 'adopt',
-    summary: '把 discover 预览中的项目显式收编入注册表',
+    summary: '把候选项目显式收编入 .gatedeck/registry.md（append-only 登记；重复登记拒绝）',
     usage: 'gatedeck adopt <path>',
     lands: 'T-M1-02',
     readOnly: false,
@@ -66,6 +72,20 @@ export const COMMANDS: readonly CommandSpec[] = [
     usage: 'gatedeck ls',
     lands: 'T-M1-02',
     readOnly: true,
+  },
+  {
+    name: 'deck',
+    summary: '决策台——等您决定/可以推进/需要关注 三区总览',
+    usage: 'gatedeck deck',
+    lands: 'T-M1-06 + T-M1-09',
+    readOnly: true,
+  },
+  {
+    name: 'handoff',
+    summary: '生成六段结构 handoff 交接包（携带源版本与生成时间；revive 为别名，同一实现）',
+    usage: 'gatedeck handoff（别名 revive）',
+    lands: 'T-M1-07',
+    readOnly: false,
   },
 ];
 
@@ -97,6 +117,21 @@ function run(argv: readonly string[], io: CliIo): number {
     return 0;
   }
 
+  // handoff（别名 revive，T-M1-07）：已实现命令，先于占位查找路由——
+  // revive 作为别名不注册进 COMMANDS（帮助只列正名），故必须在 spec 查找前拦截
+  if (command === 'handoff' || command === 'revive') {
+    if (argv[1] === '--help' || argv[1] === '-h') {
+      const spec = COMMANDS.find((c) => c.name === 'handoff');
+      if (spec !== undefined) {
+        io.out(spec.usage);
+        io.out(`  ${spec.summary}`);
+        io.out(`  落地任务：${spec.lands}${spec.readOnly ? '（纯只读命令，实现后也不写文件）' : ''}`);
+      }
+      return 0;
+    }
+    return runHandoff(process.cwd(), io);
+  }
+
   const spec = COMMANDS.find((c) => c.name === command);
   if (spec === undefined) {
     io.err(`未知命令：${command}`);
@@ -109,6 +144,28 @@ function run(argv: readonly string[], io: CliIo): number {
     io.out(`  ${spec.summary}`);
     io.out(`  落地任务：${spec.lands}${spec.readOnly ? '（纯只读命令，实现后也不写文件）' : ''}`);
     return 0;
+  }
+
+  // init 真实现路由（T-M1-01）：写路径，R-06 不覆盖；参数解析与落盘在 commands/init.ts
+  if (spec.name === 'init') {
+    return runInit(argv.slice(1), io);
+  }
+
+  // deck 为首个已落地实现（W-S2-6）：只读投影，装配与渲染在 commands/deck.ts
+  if (spec.name === 'deck') {
+    return runDeck(io);
+  }
+
+  // discover 真实现路由（T-M1-02）：纯只读预览——零写动作，不执行命令、不入册（B-7）；
+  // 扫描、ignore 过滤与候选判定的口径在 commands/discover.ts + core/discoverRules.ts
+  if (spec.name === 'discover') {
+    return runDiscover(argv.slice(1), io);
+  }
+
+  // adopt 真实现路由（T-M1-02）：显式收编入 .gatedeck/registry.md（append-only，R-02）；
+  // 候选校验与重复登记拒绝口径在 commands/adopt.ts + core registry 模块
+  if (spec.name === 'adopt') {
+    return runAdopt(argv.slice(1), io);
   }
 
   io.err(
