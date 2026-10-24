@@ -192,7 +192,7 @@ describe('T-M0b-04 · 中断点恢复（B-2）', () => {
     expect(r.needsAttention).toBe(false);
   });
 
-  it('中断点⑧：committed → noop；aborted → noop 且回显中止原因', () => {
+  it('中断点⑧：committed → noop；aborted 且全部目标仍在基线 → 干净中止 noop 且回显中止原因', () => {
     const a = markApplied(prepared(), T2);
     if (!a.ok) return;
     const l = markLogged(a.journal, T3);
@@ -212,7 +212,55 @@ describe('T-M0b-04 · 中断点恢复（B-2）', () => {
       ['pm/changelog.md', BASE2],
     ]), { eventLogged: false });
     expect(ra.action).toBe('noop');
+    expect(ra.needsAttention).toBe(false);
     expect(ra.messages.join()).toContain('用户取消');
+    expect(ra.messages.join()).toContain('干净中止');
+  });
+
+  it('评审中·1：applied 相中止（文件已写、事件未记）→ 孤儿终态不再静默 noop，manual-review 要求前向修正', () => {
+    const a = markApplied(prepared(), T2);
+    if (!a.ok) return;
+    const ab = abortOperation(a.journal, T3, '上游需求撤销');
+    if (!ab.ok) return;
+    // 两文件均已落盘为计划内容，但事件从未写入 changelog
+    const r = assessRecovery(ab.journal, obs([
+      ['pm/wbs.md', NEXT1],
+      ['pm/changelog.md', NEXT2],
+    ]), { eventLogged: false });
+    expect(r.action).toBe('manual-review');
+    expect(r.needsAttention).toBe(true);
+    expect(r.messages.join()).toContain('孤儿终态');
+    expect(r.messages.join()).toContain('correction'); // 前向修正走追加事件，不回滚不撤销
+    expect(r.retainedMaterial.eventId).toBe('01HZZZZZZZZZZZZZZZZZZZZZZZ');
+  });
+
+  it('评审中·1：prepared 相中止但有文件已部分写入 → 同样判定孤儿终态，不静默', () => {
+    const ab = abortOperation(prepared(), T2, '中途取消');
+    if (!ab.ok) return;
+    const r = assessRecovery(ab.journal, obs([
+      ['pm/wbs.md', NEXT1], // prepared 相就中断，但 wbs 已被写成计划内容
+      ['pm/changelog.md', BASE2],
+    ]), { eventLogged: false });
+    expect(r.action).toBe('manual-review');
+    expect(r.needsAttention).toBe(true);
+    expect(r.messages.join()).toContain('孤儿终态');
+  });
+
+  it('评审中·1：aborted 相存在外部修改/不可观察目标 → 不声称干净中止，manual-review', () => {
+    const ab = abortOperation(prepared(), T2, '用户取消');
+    if (!ab.ok) return;
+    const conflict = assessRecovery(ab.journal, obs([
+      ['pm/wbs.md', 'e'.repeat(64)],
+      ['pm/changelog.md', BASE2],
+    ]), { eventLogged: false });
+    expect(conflict.action).toBe('manual-review');
+    expect(conflict.needsAttention).toBe(true);
+    expect(conflict.messages.join()).toContain('无法确证干净');
+
+    const unobservable = assessRecovery(ab.journal, obs([['pm/wbs.md', BASE1]]), { eventLogged: false });
+    expect(unobservable.action).toBe('manual-review');
+    expect(unobservable.needsAttention).toBe(true);
+    expect(unobservable.targets[1]!.state).toBe('unknown');
   });
 });
 
@@ -276,7 +324,7 @@ describe('T-M0b-04 · 外部冲突与不可静默提交（B-2）', () => {
     expect(r.messages.join()).toContain('append-only');
   });
 
-  it('相位 logged 但日志不存在 → resume-log 并标记需处理（恢复后才允许 commit）', () => {
+  it('评审中·2：相位 logged 但日志不存在 → 不自动补写疑似删除，manual-review 人工核实', () => {
     const a = markApplied(prepared(), T2);
     if (!a.ok) return;
     const l = markLogged(a.journal, T3);
@@ -285,8 +333,11 @@ describe('T-M0b-04 · 外部冲突与不可静默提交（B-2）', () => {
       ['pm/wbs.md', NEXT1],
       ['pm/changelog.md', NEXT2],
     ]), { eventLogged: false });
-    expect(r.action).toBe('resume-log');
+    expect(r.action).toBe('manual-review');
     expect(r.needsAttention).toBe(true);
+    // 不再以 resume-log 自动补写消解疑似删除/回滚（B-11 疑似完整性异常）
+    expect(r.messages.join()).toContain('不自动补写');
+    expect(r.messages.join()).toContain('B-11');
   });
 });
 

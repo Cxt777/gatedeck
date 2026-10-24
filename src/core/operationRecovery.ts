@@ -16,7 +16,13 @@
  *  3. **中断提交保留可恢复材料**：journal 原样保留（目标、基线/计划 hash、event_id），
  *     评估结果回带 `retainedMaterial`，调用方不得丢弃；
  *  4. **不留状态与日志不一致**：`logged` 相只有在文件全部为计划内容 + 日志存在时才允许 commit；
- *     文件缺失/被改回 → 人工复核，不静默 commit。
+ *     文件缺失/被改回 → 人工复核，不静默 commit；
+ *  5. **中止不产生孤儿终态的静默**（评审中·1 闭环）：`aborted` 相评估按盘上观察区分
+ *     「干净中止」（全部目标仍在基线 → noop）与「孤儿终态」（部分目标已是计划内容：
+ *     文件已写、事件未记 → needsAttention + 人工前向修正，追加 correction/evidence 事件），
+ *     不再一律 noop；
+ *  6. **缺日志不自动补写疑似删除**（评审中·2 闭环）：`logged` 相 + 日志未找到 → 更可能是
+ *     外部删除/回滚等完整性异常（B-11 疑似）而非「从未写入」，转人工核实，不自动补写消解。
  *
  * 时间戳由调用方注入；core 无 IO、无时钟（纯度约束）。
  */
@@ -295,13 +301,36 @@ export function assessRecovery(
         ],
       };
     }
-    case 'aborted':
+    case 'aborted': {
+      if (hasUnknown || conflictPaths.length > 0) {
+        return {
+          ...base,
+          action: 'manual-review',
+          needsAttention: true,
+          messages: [
+            '操作已中止，但存在外部修改或不可观察的目标：中止后的盘上状态无法确证干净，交由外部编辑检测（T-M0b-07）与人工核对，材料保留',
+          ],
+        };
+      }
+      if (targets.some((t) => t.state === 'applied')) {
+        return {
+          ...base,
+          action: 'manual-review',
+          needsAttention: true,
+          messages: [
+            '操作已中止，但部分目标文件已是计划内容（文件已写、事件未记的孤儿终态）：append-only 纪律不自动回滚，也不静默当作无事发生——请人工核对后追加 correction/evidence 事件前向修正，材料保留',
+          ],
+        };
+      }
       return {
         ...base,
         action: 'noop',
         needsAttention: false,
-        messages: [`操作已中止（原因：${journal.abort_reason ?? '未记录'}）；已写文件不做自动回滚，保留材料备查`],
+        messages: [
+          `操作已中止（原因：${journal.abort_reason ?? '未记录'}），全部目标仍在写入前内容：干净中止，无恢复动作；材料保留备查`,
+        ],
       };
+    }
     case 'prepared': {
       if (conflictPaths.length > 0) {
         return {
@@ -396,9 +425,11 @@ export function assessRecovery(
       if (eventLogged === false) {
         return {
           ...base,
-          action: 'resume-log',
+          action: 'manual-review',
           needsAttention: true,
-          messages: ['相位记为 logged 但日志未找到：按同一 event_id 补写（幂等），恢复后才允许 commit'],
+          messages: [
+            '相位记为 logged（事件曾追加成功）但当前日志中找不到该事件：更可能是外部删除/git 回滚等完整性异常（B-11 疑似），而非「从未写入」；不自动补写消解疑似删除——请人工核实收据链与日志后处置，若确认补写须作为显式人工决定留痕',
+          ],
         };
       }
       return {
