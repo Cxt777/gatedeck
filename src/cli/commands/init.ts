@@ -26,6 +26,7 @@ import {
   type ProjectSeed,
 } from '../../core/contractTemplates.js';
 import type { CliIo } from '../index.js';
+import { rebuildReceiptsForFile } from '../../managed/receipts.js';
 
 /** init 用法（参数错误输出与 --help 一致口径） */
 export const INIT_USAGE = 'gatedeck init [--name <名>] [--slug <slug>] [--stage <初始阶段>]';
@@ -186,6 +187,13 @@ export function runInit(argv: readonly string[], io: CliIo, cwd: string = proces
   for (const w of written) io.out(`  ${w}`);
   io.out(`初始阶段：${inputs.stage}（当前阶段由事件折叠派生，不落 project.md——D-24）`);
   io.out('首笔事件：project.initialized 已写入 pm/changelog.md。');
+  // 首笔事件收据链登记（origin=core 事件可验真；失败不中止初始化但如实提示，W-06）
+  const receipts = rebuildReceiptsForFile(pmDir, 'changelog.md');
+  if (receipts.ok) {
+    io.out(`收据链已登记（${receipts.count} 笔，pm/receipts.jsonl + receipts.anchor.json）。`);
+  } else {
+    io.err(`收据链登记失败（${receipts.message}）——首笔事件暂为 unverified，可稍后由受管写入路径重建；deck 将如实标注。`);
+  }
   io.out('下一步：gatedeck deck 查看决策台');
   return 0;
 }

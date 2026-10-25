@@ -121,9 +121,18 @@ payload: {"from":"doing","to":"done"}
 
 gatedeck-mcp 是同一个包内的第三个 bin（MCP server）：Claude Desktop / Cursor / ZCode 等 AI 客户端经 MCP 的类型化动作读取决策台、领取任务、提交证据——但 AI **只能产生待验证据与类型化事件，不能代您授权推进**（无 `pass_gate`，不产生 `authorization.*` 事件），决定权始终在您手里。
 
-客户端配置示例将在 gatedeck-mcp 随 rc 发布后补充：
+客户端配置（Claude Desktop / Cursor / ZCode 完整指南见 [docs/guides/mcp-clients.md](./docs/guides/mcp-clients.md)）——注意 `npx gatedeck` 启动的是 CLI，MCP 入口要用 `-p` 指定包再执行包内 bin `gatedeck-mcp`。Claude Desktop 最简配置（`claude_desktop_config.json`）：
 
-<!-- MCP 配置随 gatedeck-mcp 发布后补充 -->
+```json
+{
+  "mcpServers": {
+    "gatedeck": {
+      "command": "npx",
+      "args": ["-y", "-p", "gatedeck@early", "gatedeck-mcp"]
+    }
+  }
+}
+```
 
 ## 999 元价值对照清单
 

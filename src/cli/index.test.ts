@@ -104,7 +104,7 @@ describe('gatedeck CLI 命令框架（T-M0b-08 + T-M1 系列）', () => {
     expect(out.join('\n')).toContain('命令：');
   });
 
-  it('命令注册表恰为七个子命令，readOnly 标注恰为 discover/ls/deck', () => {
+  it('命令注册表恰为九个子命令，readOnly 标注恰为 discover/ls/deck/gate', () => {
     expect(COMMANDS.map((c) => c.name)).toEqual([
       'init',
       'discover',
@@ -113,7 +113,9 @@ describe('gatedeck CLI 命令框架（T-M0b-08 + T-M1 系列）', () => {
       'ls',
       'deck',
       'handoff',
+      'gate',
+      'promote',
     ]);
-    expect(COMMANDS.filter((c) => c.readOnly).map((c) => c.name)).toEqual(['discover', 'ls', 'deck']);
+    expect(COMMANDS.filter((c) => c.readOnly).map((c) => c.name)).toEqual(['discover', 'ls', 'deck', 'gate']);
   });
 });

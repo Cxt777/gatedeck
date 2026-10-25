@@ -38,6 +38,7 @@ import { resolveProjectContext } from '../context.js';
 import {
   appendTypedEventViaCas,
   buildManagedEnvelope,
+  rebuildChangelogReceiptsNote,
 } from './events.js';
 import { readTextIfExists, writeError, type McpToolDeps, type WriterHandler } from './writers.js';
 
@@ -343,6 +344,7 @@ export const requestPromotion: WriterHandler<RequestPromotionParams> = (rootDir,
     file: 'pm/changelog.md',
     nextHash: result.nextHash,
     currentStage: ctx.stage.currentStage,
+    receiptChainNote: rebuildChangelogReceiptsNote(rootDir), // 落盘成功后全量重建 changelog 收据链（失败文案如实提示，不回滚）
     ...(warnings.length > 0 ? { warnings } : {}),
     nextStep:
       '批准与执行仅限本机 CLI 真人 TTY 流程（D-22/B-4/B-12）：请携带 operation_id 在 CLI 侧继续 confirm/apply；' +

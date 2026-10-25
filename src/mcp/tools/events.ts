@@ -35,6 +35,7 @@ import {
   type ManagedApiKind,
 } from '../../core/eventEnvelope.js';
 import { readTextIfExists, writeError, writeViaCas, type McpToolDeps, type WriterHandler } from './writers.js';
+import { rebuildReceiptsForFile } from '../../managed/receipts.js';
 import { resolveProjectContext } from '../context.js';
 
 /* ---------------------------------------------------------------- *
@@ -162,6 +163,28 @@ const NON_AUTHORITY_NOTE =
   '本事件 origin=managed-api、integrity=unknown：未经收据链验证，不参与状态推导（P-09）；' +
   '验真由本机 CLI 建立收据链后经 eventLog 投影裁定。';
 
+/**
+ * insights 事件不建链说明（收据链装配口径）：deck 收据契约只覆盖 changelog.md 事件流
+ * （cli/commands/deck.ts:149-173 读取实现），insights 与 changelog 共用一个收据文件会互相
+ * 覆盖——insights 事件（record_note / report_usage）暂不登记收据链，为后续项。
+ */
+const INSIGHTS_NO_RECEIPT_NOTE =
+  'insights.md 事件暂不登记收据链（后续项）：deck 收据契约只覆盖 changelog.md 事件流，' +
+  '共用一个收据文件会互相覆盖；本事件为非权威事件不驱动状态（P-09），unverified 即其正确状态。';
+
+/**
+ * changelog 事件落盘成功后的收据链重建（收据链装配闭环）：
+ * 全量重建 pm/receipts.jsonl + receipts.anchor.json（append-only 下与增量等价）；
+ * 事件已落盘（append-only 事实已发生），重建失败不回滚、返回如实提示文案（W-06 不吞）。
+ * 导出供 gates.ts request_promotion 落盘后复用（同一文案与同一重建口径）。
+ */
+export function rebuildChangelogReceiptsNote(rootDir: string): string {
+  const rebuild = rebuildReceiptsForFile(join(rootDir, 'pm'), 'changelog.md');
+  return rebuild.ok
+    ? `收据链已重建（changelog 链 ${rebuild.count} 笔，pm/receipts.jsonl + receipts.anchor.json）。`
+    : `收据链重建失败（${rebuild.code}）：${rebuild.message}——事件已落盘（append-only），deck 将按需处理状态如实标注，可稍后由受管写入路径重建。`;
+}
+
 /** 解析项目 slug（object_id 缺省构造用；缺失如实用占位并注明） */
 function projectSlugOrUnknown(rootDir: string, deps: McpToolDeps): { slug: string; note?: string } {
   const ctx = resolveProjectContext(rootDir, deps.nowIso());
@@ -224,7 +247,11 @@ export const recordNote: WriterHandler<RecordNoteParams> = (rootDir, args, deps)
     integrity: envelope.integrity,
     file: 'pm/insights.md',
     nextHash: result.nextHash,
-    ...(slugInfo.note !== undefined ? { notes: [slugInfo.note, NON_AUTHORITY_NOTE] } : { notes: [NON_AUTHORITY_NOTE] }),
+    notes: [
+      ...(slugInfo.note !== undefined ? [slugInfo.note] : []),
+      NON_AUTHORITY_NOTE,
+      INSIGHTS_NO_RECEIPT_NOTE, // insights 侧暂跳过收据重建（deck 契约只覆盖 changelog 链）
+    ],
   };
 };
 
@@ -295,6 +322,7 @@ export const submitEvidence: WriterHandler<SubmitEvidenceParams> = (rootDir, arg
     notes: [
       '证据为待验（validation_status=pending，属检查事实维度置于 payload）：本通道绝不代裁定检查完成或任务状态迁移（B-17/R-09）。',
       NON_AUTHORITY_NOTE,
+      rebuildChangelogReceiptsNote(rootDir), // 落盘成功后全量重建 changelog 收据链（失败在 notes 如实提示，不回滚）
     ],
   };
 };
@@ -382,7 +410,11 @@ export const reportUsage: WriterHandler<ReportUsageParams> = (rootDir, args, dep
     integrity: envelope.integrity,
     file: 'pm/insights.md',
     nextHash: result.nextHash,
-    ...(slugInfo.note !== undefined ? { notes: [slugInfo.note, NON_AUTHORITY_NOTE] } : { notes: [NON_AUTHORITY_NOTE] }),
+    notes: [
+      ...(slugInfo.note !== undefined ? [slugInfo.note] : []),
+      NON_AUTHORITY_NOTE,
+      INSIGHTS_NO_RECEIPT_NOTE, // insights 侧暂跳过收据重建（deck 契约只覆盖 changelog 链）
+    ],
   };
 };
 

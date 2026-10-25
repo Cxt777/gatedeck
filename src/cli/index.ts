@@ -19,8 +19,10 @@ const PACKAGE_VERSION: string = createRequire(import.meta.url)('../../package.js
 import { runAdopt } from './commands/adopt.js';
 import { runDeck } from './commands/deck.js';
 import { runDiscover } from './commands/discover.js';
+import { runGateCheck } from './commands/gate.js';
 import { runHandoff } from './commands/handoff.js';
 import { runInit } from './commands/init.js';
+import { runPromote } from './commands/promote.js';
 
 /** 可注入终端 IO（测试零侵入；默认 console） */
 export interface CliIo {
@@ -89,6 +91,20 @@ export const COMMANDS: readonly CommandSpec[] = [
     summary: '生成六段结构 handoff 交接包（携带源版本与生成时间；revive 为别名，同一实现）',
     usage: 'gatedeck handoff（别名 revive）',
     lands: 'T-M1-07',
+    readOnly: false,
+  },
+  {
+    name: 'gate',
+    summary: '检查事实查询与失效判定（只读；本版不执行门禁命令，R-07/D-26）',
+    usage: 'gatedeck gate check [--gate <门禁id>]',
+    lands: 'T-M1-04',
+    readOnly: true,
+  },
+  {
+    name: 'promote',
+    summary: '本地交互确认推进（TTY 三步编排收口；非交互拒绝，B-12）',
+    usage: 'gatedeck promote [--operation-id <id>]',
+    lands: 'T-M1-05',
     readOnly: false,
   },
 ];
@@ -170,6 +186,16 @@ function run(argv: readonly string[], io: CliIo): number {
   // 候选校验与重复登记拒绝口径在 commands/adopt.ts + core registry 模块
   if (spec.name === 'adopt') {
     return runAdopt(argv.slice(1), io);
+  }
+
+  // gate 子树路由（gate check 为唯一子命令，缺省即 check）
+  if (spec.name === 'gate') {
+    return runGateCheck(argv.slice(1), io);
+  }
+
+  // promote 真实现路由（T-M1-05）：TTY 三步编排收口（confirm/apply 仅本命令，B-12）
+  if (spec.name === 'promote') {
+    return runPromote(argv.slice(1), io);
   }
 
   io.err(
