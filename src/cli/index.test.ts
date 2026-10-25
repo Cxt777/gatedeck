@@ -1,5 +1,9 @@
+import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
+import { buildContractBundle } from '../core/contractTemplates.js';
 import { COMMANDS, runCli, type CliIo } from './index.js';
 
 /** 可断言的内存终端：out/err 分行收集 */
@@ -69,12 +73,37 @@ describe('gatedeck CLI 命令框架（T-M0b-08 + T-M1 系列）', () => {
     expect(err.join('\n')).toContain('--stage');
   });
 
-  it('deck 真实现：本仓 pm/（dogfooding）→ 渲染决策台标题，退出码 0（只读路径）', () => {
-    // 前提：本仓自 2026-10-25 起 dogfooding（pm/ 存在）；「无 pm/ 引导」路径由冒烟脚本覆盖
-    const { io, out, err } = captureIo();
-    expect(runCli(['deck'], io)).toBe(0);
-    const text = [...out, ...err].join('\n');
-    expect(text).toContain('决策台');
+  it('deck 真实现：无 pm/ → 初始化引导 exit 2；有 pm/ → 渲染决策台标题 exit 0（自包含 fixture）', () => {
+    const orig = process.cwd();
+    const dir = mkdtempSync(join(tmpdir(), 'gd-deck-'));
+    try {
+      // 路径一：干净目录（CI 同构环境）→ 引导
+      process.chdir(dir);
+      const ioNone = captureIo();
+      expect(runCli(['deck'], ioNone.io)).toBe(2);
+      expect([...ioNone.out, ...ioNone.err].join('\n')).toContain('init');
+
+      // 路径二：构造完整 pm/ 契约（模板工厂）→ 决策台渲染
+      const bundle = buildContractBundle({
+        projectName: 'deck 测试项目',
+        slug: 'deck-test',
+        description: '自包含 fixture',
+        initializedAt: '2026-10-25T10:00:00+08:00',
+        initialStage: 'M1',
+        actorId: 'a'.repeat(32),
+        sessionId: 'b'.repeat(32),
+      });
+      mkdirSync(join(dir, 'pm'), { recursive: true });
+      for (const [name, text] of Object.entries(bundle)) {
+        writeFileSync(join(dir, 'pm', name), text, 'utf8');
+      }
+      const ioDeck = captureIo();
+      expect(runCli(['deck'], ioDeck.io)).toBe(0);
+      expect(ioDeck.out.join('\n')).toContain('决策台');
+    } finally {
+      process.chdir(orig);
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
 
   it('adopt 真实现：无参数 → 用法报错，退出码 2（零副作用路径）', () => {
