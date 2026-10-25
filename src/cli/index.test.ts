@@ -69,11 +69,12 @@ describe('gatedeck CLI 命令框架（T-M0b-08 + T-M1 系列）', () => {
     expect(err.join('\n')).toContain('--stage');
   });
 
-  it('deck 真实现：仓库根无 pm/ → 初始化引导，非零退出（只读路径）', () => {
+  it('deck 真实现：本仓 pm/（dogfooding）→ 渲染决策台标题，退出码 0（只读路径）', () => {
+    // 前提：本仓自 2026-10-25 起 dogfooding（pm/ 存在）；「无 pm/ 引导」路径由冒烟脚本覆盖
     const { io, out, err } = captureIo();
-    expect(runCli(['deck'], io)).not.toBe(0);
+    expect(runCli(['deck'], io)).toBe(0);
     const text = [...out, ...err].join('\n');
-    expect(text).toContain('init');
+    expect(text).toContain('决策台');
   });
 
   it('adopt 真实现：无参数 → 用法报错，退出码 2（零副作用路径）', () => {
