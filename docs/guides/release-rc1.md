@@ -1,13 +1,14 @@
 # 发布手册 · gatedeck v0.1.0-rc.1（W-S4-3 / CP-3）
 
-> 状态（2026-10-25 更新）：**A 轨已上线**——GitHub 直装可用（`npx github:Cxt777/gatedeck`，prepare 现场构建，三 bin 实测通过），零 npm 账号依赖；**B 轨（npm registry 正式发布）待主理人注册 npm 账号**（主理人尚无 npm 账号）。
+> 状态（2026-10-25 二次更新）：**分发已三轨齐备，rc 事实上线**——①GitHub 直装（prepare 现场构建）；②GitHub Release 预构建 tarball（tag v0.1.0-rc.1 + Release 已建，安装路径实测通过）；③npm registry 待主理人网络条件允许时注册发布（npmjs.com 网站被网络拦截——注意 registry.npmjs.org 依赖下载是通的，被拦的只是网站注册页；换手机热点常可解）。
 
-## 〇、B 轨前置：注册 npm 账号（约 2 分钟，一次性）
+## 〇、B 轨前置：注册 npm 账号（约 2 分钟，一次性；可选）
 
-1. 浏览器打开 <https://www.npmjs.com/signup>，用邮箱 + 用户名 + 密码注册（或点 Sign in with GitHub 直接用 GitHub 账号授权——更快，无需另记密码）；
-2. 收验证邮件点确认；
-3. 在本机执行一条命令完成登录（会弹浏览器确认）：`npm login`；
-4. 登录后告知 AI，或自行执行下面的一键发布。
+1. 若 npmjs.com 被网络拦截：**换手机热点**（最常见解法，注册页是间歇可达）或任一可用网络环境；
+2. 浏览器打开 <https://www.npmjs.com/signup>，推荐点 **Sign in with GitHub** 直接授权（无需另记密码）；
+3. 收验证邮件点确认；本机执行 `npm login`（弹浏览器确认）；
+4. 登录后告知 AI 代发，或自行执行下面的一键发布。
+5. 备选（不推荐作为主渠道）：GitHub Packages（npm.pkg.github.com）——现有 GitHub 账号即可发布，但公开包安装端也需 PAT 认证，伤「5 分钟接入」体验，仅作特殊网络环境备选。
 
 ## 一、一键发布（主理人执行）
 
