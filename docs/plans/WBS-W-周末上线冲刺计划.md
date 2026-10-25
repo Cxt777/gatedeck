@@ -161,7 +161,19 @@
 
 ## 【结果】计划的执行结果（完成后追加）
 
-- （待冲刺结束后追加：实际产出 / 验证结果 / 计划偏差与原因 / 未完成项与后续动作）
+- **（2026-10-25 冲刺收口留痕）**
+
+**终态：28 工作包 = done 25 / doing 2（W-S4-3/4 发布联动）/ dropped 1（W-S4-2 让路①）**。
+
+- **实际产出**：
+  - S0：CP-1 依预授权拍板（DP-1~5 按推荐）；**workBuddy 弃用定名 gatedeck-mcp**（腾讯同名产品，R2）；D-23 回写执行；GitHub 仓库 Cxt777/gatedeck + CI 云端多 run 全绿 + 分支保护；
+  - S1：M0b 收口 9/9 done（夜间任务产出 + 主会话验收）；**CP-2 双轮审核通过**（GLM-5.3 独立上下文，DeepSeek 不可用已留痕；轮 1 六项硬条件 satisfied + 轮 2 无致命通过）；G-M0a/G-M0b 依预授权代开（留痕待追认）；R2-01 append-only 口径依 10 分钟规则代裁 closed（更正条目补痕方案）；
+  - S2：8/8 done（模板+init+dogfooding 迁移+度量启动 / discover+adopt+ignore / manifest 指纹 / gate check / promote TTY / deck 决策台四条规则 / handoff 六段 / 归因隐私）；
+  - S3：4/4 done（gatedeck-mcp 十五工具全集对齐 MOD-06 + B-4/B-17 机器守卫 + SDK 装配 + 三客户端指南 + 冒烟脚本）；
+  - S4：README 双语+首屏素材+999 元对照 done；发布工程就绪（0.1.0-rc.1 + SOP）；落地页让路①裁剪；社区发布随发布联动延后；V1~V6 复验落档。
+- **验证结果**：全量 lint/typecheck/test **29 文件 451 用例绿**；CI 云端多个 run success（分支保护 strict 生效）；干净环境 npm pack 安装冒烟（三 bin + MCP initialize）真实通过；MCP 与 CLI 决策台数据一致性实证；B-12 非交互拒绝实证；V3 前段全真 + 写入段 17 用例全链路集成测试。
+- **计划偏差与原因**：①审核模型 DeepSeek→GLM-5.3 独立上下文（环境通道不可用，削弱已留痕）；②落地页裁剪（让路①预定义）；③**npm 发布未执行**（凭证物理缺失 ENEEDAUTH——唯一未完成动作，发布工程与 SOP 全就绪，主理人 npm login 后一条命令）；④Flash 工作流两批次因限流排队/沙箱 spawn 失败 0 token，主力开发由夜间任务（AI）与主会话完成（进度优先原则）。
+- **未完成项与后续动作**：①npm publish（主理人登录后执行或授权 AI）；②社区发布（发布生效后 1–2 日内）；③git tag v0.1.0-rc.1（随发布）；④真人 TTY promote 首次实操（B-12 设计使然，主理人验收时按 docs/guides/mcp-clients.md 演示段执行）；⑤G-M1 自举度量两周窗口运行（至 11-08）；⑥遗留清单 R2-01 已 closed、其余项全 closed，新遗留随 G-M1 准出审核再开。
 
 ---
 

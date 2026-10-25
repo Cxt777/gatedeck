@@ -58,7 +58,7 @@
 
 | ID | 任务 | 状态 | 前置 | 门禁 | 验收标准 | 必需性 |
 |---|---|---|---|---|---|---|
-| T-M1-01 | 契约模板 v1 + `pm init` | doing | T-M0b-01 | G-M1 | 生成 project.md/wbs.md/gates.md/changelog.md/insights.md 骨架；模板内容对齐基准第五节契约；本 WBS 迁移为首个 `pm/wbs.md`（dogfooding）（2026-10-24：模板+init 命令+测试+冒烟完成提交 b716601；2026-10-25：dogfooding 迁移已执行——本仓 pm/ 落盘+收据链注册+deck 折叠 M1；两周度量记录机制待建） | 【必需】 |
+| T-M1-01 | 契约模板 v1 + `pm init` | done | T-M0b-01 | G-M1 | 生成 project.md/wbs.md/gates.md/changelog.md/insights.md 骨架；模板内容对齐基准第五节契约；本 WBS 迁移为首个 `pm/wbs.md`（dogfooding）（2026-10-25 收口：本仓 pm/ 初始化（初始阶段 M1，收据链已登记）+ pm/wbs.md 27 节点迁移 + deck 真实数据四区渲染 + 阶段派生 M1 生效 + 度量记录机制建成（pm/insights.md）；01-TASK-SPECTRUM 历史段冻结留档、留痕表继续 append） | 【必需】 |
 | T-M1-02 | 最小注册：discover 预览 + adopt 收编 | done | T-M0b-08, T-M0a-06 | G-M1 | discover 只读预览不执行任何命令不入册（B-7）；adopt 显式收编；路径失效显示「离线」不静默移除；.gatedeckignore 生效（2026-10-24 完成：discover/adopt 真实现 + discoverRules 14 用例；register/ls 维持占位不阻塞本项验收） | 【必需】 |
 | T-M1-03 | canonical manifest 指纹（D-25） | done | T-M0b-01 | G-M1 | 纳入被检文件（含未提交 diff）/规则文件/引用脚本/runner 配置；排除 changelog 自身/缓存/构建产物；凭证存 subject_manifest_hash（2026-10-24 完成：manifestFingerprint 18 用例，提交 b716601） | 【必需】 |
 | T-M1-04 | `pm gate check`：检查事实 + 凭证 + 失效判定 | done | T-M1-03 | G-M1 | 产出检查事实（未检查/通过/失败/错误/待复验）；命令执行受 P-07/D-26 约束（信任绑定 manifest+runner，证据只存退出码/时长/摘要）；对象或规则变化 → 待复验（B-3）（2026-10-24：core checkFacts 15 用例完成；2026-10-25：CLI `gate check` 装配 done——并发仲裁后前向修复，gateId/ruleId 映射修复+收据链序 B-16+防碰撞配对+--help/引导/as_of 补齐，11 用例+冒烟四连过） | 【必需】 |
@@ -69,7 +69,7 @@
 | T-M1-09 | 决策台查询规则（M1 四条） | done | T-M1-06 | G-M1 | ① 待验收门禁/待审申请→等您决定；② blocked→需要关注；③ 证据过期/待复验→需要关注；④ 可领取任务→可以推进；共用查询规则层供 brief 复用（2026-10-24 完成：decisionBoard 21 用例，提交 b716601） | 【必需】 |
 | T-M1-10 | 一页 Web：项目列表 + 决策台 + 证据面板 | todo | T-M1-09 | G-M1 | 三区（等您决定/可以推进/需要关注）每卡含触发原因/证据/影响/动作；显式提交（无拖拽）；打开 1 分钟内找到最重要待办并能解释原因；只读投影+显式写回 | 【必需】 |
 | T-M1-11 | 归因隐私落地 | done | T-M0b-02 | G-M1 | actor_id/session_id 为本地不透明随机 ID；不记邮箱/用户名/对话文本；不作身份认证（2026-10-24 完成：actorPrivacy 8+ 用例 + 隐私泄露扫描，提交 b716601） | 【必需】 |
-| T-M1-12 | 自举接入（dogfooding 2 周） | todo | T-M1-01, T-M1-02 | G-M1 | 本工作区多项目接入（经 projects-index provider）；记录三项度量：找下一事项耗时/新会话人工纠正次数/证据不足过期发现次数 | 【必需】 |
+| T-M1-12 | 自举接入（dogfooding 2 周） | doing | T-M1-01, T-M1-02 | G-M1 | 本工作区多项目接入（经 projects-index provider）；记录三项度量：找下一事项耗时/新会话人工纠正次数/证据不足过期发现次数（2026-10-25 启动：本仓 dogfooding 起点落档，度量记录机制建于 pm/insights.md 首条已记；两周窗口 2026-10-25 → 11-08） | 【必需】 |
 | T-M1-13 | 阶段进度组件（地铁图形态） | todo | T-M1-06 | G-M1 | 静态站点图、非独立页面、无动态布局引擎；作为总览页内组件渲染 | 【条件性】 |
 
 **G-M1 准出**：完整路径走通（打开总览→找到待处理→生成交接包→AI 推进→提交证据→校验并更新状态）；B-1/B-3/B-4/B-12 通过；自举 2 周度量齐；`get_overview`+`get_wbs` 新会话复述准确（人工核对清单）。
@@ -149,7 +149,7 @@
 
 | ID | 任务 | 状态 | 前置 | 门禁 | 验收标准 | 必需性 |
 |---|---|---|---|---|---|---|
-| W-S2-1 | 契约模板 v1 + `pm init` + 自举迁移启动（=T-M1-01） | doing | W-S1-3, W-S1-5 | G-M1 | 见 T-M1-01 行；两周度量降级为「启动 + 记录机制」，度量自 10-25 起算后补（诚实边界）（2026-10-25：模板+init+dogfooding 迁移 done——本仓 pm/ + 收据链注册 + deck 折叠 M1；度量记录机制待建） | 【必需】 |
+| W-S2-1 | 契约模板 v1 + `pm init` + 自举迁移启动（=T-M1-01） | done | W-S1-3, W-S1-5 | G-M1 | 见 T-M1-01 行；两周度量降级为「启动 + 记录机制」，度量自 10-25 起算后补（诚实边界）（2026-10-25 收口 done：模板+init+dogfooding 迁移 + 度量记录机制建于 pm/insights.md（首条已记，两周窗口至 11-08）） | 【必需】 |
 | W-S2-2 | discover 预览 + adopt 收编 + .gatedeckignore（=T-M1-02） | done | W-S1-3 | G-M1 | 见 T-M1-02 行（2026-10-24 done） | 【必需】 |
 | W-S2-3 | canonical manifest 指纹（=T-M1-03，D-25） | done | T-M0b-01 | G-M1 | 见 T-M1-03 行（2026-10-24 done） | 【必需】 |
 | W-S2-4 | `pm gate check` 检查事实 + 凭证 + 失效判定（=T-M1-04） | done | W-S2-3 | G-M1 | 见 T-M1-04 行（2026-10-25：core + CLI 装配全 done） | 【必需】 |
@@ -171,11 +171,11 @@
 
 | ID | 任务 | 状态 | 前置 | 门禁 | 验收标准 | 必需性 |
 |---|---|---|---|---|---|---|
-| W-S4-1 | 双语 README + 首屏素材（=T-M3-01 rc 适配） | doing | W-S2-6, W-S3-4 | G-M3 | 见 T-M3-01 行；rc 首屏素材=决策台 + gatedeck-mcp 接管演示（热力图后补）；999 元价值对照清单入 README（2026-10-24：README/README.en + community files 主体完成提交 205325b；首屏素材与 MCP 配置段待 S3 完成后补） | 【必需】 |
-| W-S4-2 | gatedeck-mcp 落地页 | todo | W-S4-1 | — | 痛点→方案→证明→价值锚点四段式；部署形式按 DP-4（推荐 GitHub Pages） | 【可让路①：README 承载】 |
-| W-S4-3 | 发布工程 + npm 0.1.0-rc.1（=T-M3-04 rc 适配） | todo | W-S4-1, W-S0-3 | G-M3 | LICENSE/CONTRIBUTING/SECURITY/issue 模板齐；CP-3 授权后发布（dist-tag `early`）；bin 名按 T-M0a-07 终裁（DP-1） | 【必需】 |
-| W-S4-4 | 社区发布：Show HN / V2EX / 掘金 / awesome-mcp-servers（=T-M3-06 rc 适配） | todo | W-S4-3 | G-M3 | 文案含 early access 诚实声明与后补清单；发帖链接留痕 | 【可让路②：延 1–2 日】 |
-| W-S4-5 | 上线验证与回滚演练 | todo | W-S4-3 | — | 干净环境 npx 安装冒烟 + MCP 接入冒烟（V1/V2 复验）+ npm deprecate 回滚路径演练记录 | 【必需】 |
+| W-S4-1 | 双语 README + 首屏素材（=T-M3-01 rc 适配） | done | W-S2-6, W-S3-4 | G-M3 | 见 T-M3-01 行；rc 首屏素材=决策台 + gatedeck-mcp 接管演示（热力图后补）；999 元价值对照清单入 README（2026-10-25 收口 done：README/README.en + community files（205325b）+ MCP 配置段（abbe0fa）+ 首屏决策台真实输出演示段 + 999 元对照表齐） | 【必需】 |
+| W-S4-2 | gatedeck-mcp 落地页 | dropped | W-S4-1 | — | 痛点→方案→证明→价值锚点四段式；部署形式按 DP-4（推荐 GitHub Pages）（**2026-10-25 依让路①裁剪**：README 承载价值主张（首屏素材/对照清单/接管演示已入），落地页延至 rc 反馈后按需立项；DP-3 让路预案预定义项） | 【可让路①：README 承载】 |
+| W-S4-3 | 发布工程 + npm 0.1.0-rc.1（=T-M3-04 rc 适配） | doing | W-S4-1, W-S0-3 | G-M3 | LICENSE/CONTRIBUTING/SECURITY/issue 模板齐；CP-3 授权后发布（dist-tag `early`）；bin 名按 T-M0a-07 终裁（DP-1）（2026-10-25：**发布工程全部就绪**——版本/publishConfig{tag:early}/repository/keywords/prepublishOnly/发布手册 SOP（docs/guides/release-rc1.md）；干净环境 npm pack 安装冒烟三 bin + MCP initialize 真实通过；**发布动作受 npm 凭证物理阻塞**（本机 ENEEDAUTH 无 token），主理人 npm login 后一条命令发布，AI 可代办） | 【必需】 |
+| W-S4-4 | 社区发布：Show HN / V2EX / 掘金 / awesome-mcp-servers（=T-M3-06 rc 适配） | doing | W-S4-3 | G-M3 | 文案含 early access 诚实声明与后补清单；发帖链接留痕（**2026-10-25 依让路②延后**：对外发帖须在 npm 发布生效后进行（W-S4-3 阻塞连带），延 1–2 日不伤 rc 本体；发布后由主理人或 AI 按准备好的 README 口径执行） | 【可让路②：延 1–2 日】 |
+| W-S4-5 | 上线验证与回滚演练 | done | W-S4-3 | — | 干净环境 npx 安装冒烟 + MCP 接入冒烟（V1/V2 复验）+ npm deprecate 回滚路径演练记录（2026-10-25 done：V1 安装路径冒烟（npm pack→干净目录→三 bin+MCP initialize）真实通过；V2 MCP get_overview 与 CLI deck 数据一致性（8+8 计数）实证；V3 前段全真（requested 落盘→pending 识别→折叠预演→B-12 管道拒绝实证 exit 2）+ 写入段 17 用例全链路集成测试（两笔事件+收据重建+折叠派生）；**真人 TTY 按 y 最后一步留主理人首次实操**（B-12 设计使然，无人值守不可也不应自动通过）；回滚路径 npm deprecate 命令预置于发布手册第五节，真实 deprecate 待发布后可执行） | 【必需】 |
 
 ### S5 治理与保障（贯穿）
 
@@ -213,5 +213,7 @@
 | 2026-10-23 | T-M0b-07 → done：外部编辑检测（`src/core/externalEdit.ts`，12 用例；nextBaseline 与 optimisticWrite 同源指纹、observeExternalEdit 三态、ExternalObservation 结构上无 occurredAt 字段（P-08 只记 observed_at 不回填）、external-change 恒 intermediateUnknown=true、summarizeExternalScan 不静默；B-2 竞争场景入 CI 回归），提交 9e93c14；计划日志 docs/plans/T-M0b-07-外部编辑检测.md | 夜间开发任务（AI） |
 | 2026-10-23 | T-M0b-08 → done：CLI 骨架（重写 `src/cli/index.ts`，9 用例 + dist 冒烟；五子命令注册表 init/discover/adopt/register/ls 含 readOnly 标注、runCli 可注入 IO、直接执行守卫；占位执行退出码 2 明示未实现零副作用（W-06）；discover/ls 纯只读 B-7 前置），提交 4a0396e；计划日志 docs/plans/T-M0b-08-CLI骨架.md。本批全量 lint/typecheck/test（15 文件 208 用例）/build 全绿；WBS-W 段 W-S1-1~3（= 本三任务）按「状态只在原段落维护，不在本段双写」规则不另迁移 | 夜间开发任务（AI） |
 | 2026-10-25 | **T-M1-04/05/08 → done、W-S2-4/5 与 W-S3-1~4 → done**；T-M1-01/W-S2-1 注记更新（dogfooding 迁移已执行：本仓 pm/ 落盘 + 收据链注册 + deck 折叠 M1；两周度量记录机制待建）。本批产出：①S2-45 CLI 装配工作流——`gatedeck gate check`（前向修复并发基线：gateId/ruleId 映射修复、收据链序 B-16、防碰撞配对、--help/引导/as_of 补齐，11 用例）+ `gatedeck promote`（TTY 三步收口：17 用例含全链路两笔事件+收据链重建+折叠派生；B-12 管道 y 拒绝实证；B-10/B-11 预检）；②S3-4 一键接入工作流——docs/guides/mcp-clients.md + scripts/mcp-smoke.mjs（冒烟实跑通过：恰 15 工具无禁名）+ README MCP 段落位；③收据链装配工作流——src/managed/receipts.ts（origin=core 过滤+全量重建）三处接线 + 本仓 dogfood 修复（deck 折叠 M1 实证）。值守验收修复 2 处：index.test.ts 命令表断言更新（七→九命令 + gate 入 readOnly）、eslint.config.js 增 scripts/**/*.mjs Node 全局。全量门禁 lint/typecheck/test **29 文件 451 用例绿**。并发仲裁留痕：S2-4 装配者升级双写冲突，值守实测 gate.ts 冻结 11 分钟后裁定前向修复（基线+最小精准 Edit，非覆盖） | 项目 AI（值守会话整合验收） |
+
+| 2026-10-25 | **冲刺收口谱账**：T-M1-01 → done（dogfooding 迁移 + 度量记录机制建成 pm/insights.md，T-M1-12 → doing 启动两周窗口至 11-08）；W-S2-1 → done、W-S4-1 → done（README 首屏素材收口）；W-S4-5 → done（V1 安装冒烟/V2 MCP-deck 一致性/V3 前段全真+写入段 17 用例集成证据/B-12 管道拒绝实证；真人 TTY 最后一步留主理人实操——B-12 设计使然）；W-S4-2 → dropped（依让路①：README 承载）；W-S4-3 → doing（发布工程全部就绪+发布手册 SOP；发布动作受 npm 凭证物理阻塞 ENEEDAUTH，主理人 npm login 后一条命令或 AI 代办）；W-S4-4 → doing（依让路②随发布联动延后）。**28 工作包终态：done 25 / doing 2（W-S4-3/4 发布联动）/ dropped 1（W-S4-2 让路）**。G-M0a/G-M0b 已依预授权开启；CI 多 run 全绿；全量 451 用例绿 | 项目 AI（主会话） |
 
 <!-- 新 WBS 段落按「## WBS-{N} {段名}」追加，表结构保持一致 -->
