@@ -66,7 +66,7 @@ describe('T-M0b-05 · project.md 派生态字段审计（D-24）', () => {
   });
 
   it('不含阶段字段的 project.md 无冲突（只读诊断）', () => {
-    expect(auditProjectMarkdown('name: demo\nrepo: local\nowner: 主理人\n')).toHaveLength(0);
+    expect(auditProjectMarkdown('name: demo\nrepo: local\nowner: 项目负责人\n')).toHaveLength(0);
   });
 });
 

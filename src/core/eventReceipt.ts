@@ -13,7 +13,7 @@
  *  - 加载时验证内容+顺序；验证失败 → integrity=invalid，不参与折叠、进入「需处理」状态、
  *    不静默重算（B-10/B-11）；
  *  - 锚点缺失 ≠ 锚点不符：换机/本地锚点丢失走基准「来源未知」恢复流程——链上事件一律
- *    降为 unknown（不参与推导）并进入「需处理」，等待主理人重新锚定，绝不静默重算。
+ *    降为 unknown（不参与推导）并进入「需处理」，等待项目负责人重新锚定，绝不静默重算。
  *
  * 纯字符串计算，无 IO（core 纯度约束）。
  */
@@ -190,7 +190,7 @@ export function verifyEventChain(
     anchorState = 'missing';
     issues.push({
       code: 'anchor-missing',
-      message: '存在收据但本地锚点缺失（换机或锚点丢失）：按「来源未知」恢复流程处理，链上事件不参与推导，待主理人重新锚定，不静默重算',
+      message: '存在收据但本地锚点缺失（换机或锚点丢失）：按「来源未知」恢复流程处理，链上事件不参与推导，待项目负责人重新锚定，不静默重算',
     });
   } else if (anchor !== null && (anchor.chain_head !== recomputedHead || anchor.length !== receipts.length)) {
     anchorState = 'mismatch';

@@ -14,7 +14,7 @@ import {
 const RICH_LF = [
   '# 项目 WBS（测试样例）',
   '',
-  '<!-- 主理人手写注释：机器不得吞掉（R-04） -->',
+  '<!-- 项目负责人手写注释：机器不得吞掉（R-04） -->',
   '',
   '### T-A 第一个任务',
   '',
@@ -23,7 +23,7 @@ const RICH_LF = [
   'title: 第一个任务（中文标题）',
   'status: todo',
   'deps: T-B, T-C',
-  'owner: 主理人',
+  'owner: 项目负责人',
   'note_x: 手写未知字段保留',
   '```',
   '人类说明自由文本，不参与状态推导。',
@@ -105,7 +105,7 @@ describe('T-M0b-01 · round-trip 保真（R-04/P-04）', () => {
     expect(diffs).toEqual([21]); // 仅 T-B 的 status 行（0-based 第 21 行）
     expect(after!.split('\n')[21]).toBe('status: done');
     // 注释行与人类说明原样
-    expect(after).toContain('<!-- 主理人手写注释：机器不得吞掉（R-04） -->');
+    expect(after).toContain('<!-- 项目负责人手写注释：机器不得吞掉（R-04） -->');
     expect(after).toContain('人类说明自由文本，不参与状态推导。');
   });
 

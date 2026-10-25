@@ -8,7 +8,7 @@
  *  - discover：**纯只读**真实现（T-M1-02）——零写动作，不执行命令、不入册、不改文件（B-7）；
  *    ls：仍为**纯只读**占位（「discover/ls 纯只读」自骨架期成立，B-7）；
  *  - 占位命令执行一律退出码 2 并明示未实现：脚本不得把「无效果」当成功（W-06）；
- *  - gatedeck-mcp 第三 bin 为 WBS-W S3 冲刺任务（DP-1 终裁），不在本任务范围。
+ *  - gatedeck-mcp 第三 bin（MCP server 入口，DP-1 终裁）随独立任务落地。
  */
 import { pathToFileURL } from 'node:url';
 import { createRequire } from 'node:module';

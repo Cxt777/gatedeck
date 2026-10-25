@@ -139,7 +139,7 @@ describe('T-M0b-02 · 事件日志投影', () => {
 
   it('块外人类说明不产生条目；空文档投影为空', () => {
     const e1 = env();
-    const md = '主理人批注：本次状态迁移已口头确认。\n\n' + serializeEventBlock(e1);
+    const md = '项目负责人批注：本次状态迁移已口头确认。\n\n' + serializeEventBlock(e1);
     const p1 = projectEventLog(md, [], null);
     expect(p1.entries).toHaveLength(1);
     const p2 = projectEventLog('', [], null);

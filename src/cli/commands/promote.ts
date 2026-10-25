@@ -520,10 +520,10 @@ function readReceiptsState(pmDir: string): { receipts: EventReceipt[]; anchor: R
 
 /** 两笔事件的人类说明（块外自由文本，不驱动状态——基准 3.5/R-09） */
 function confirmNote(operationId: string): string {
-  return `主理人于本机真人终端确认（B-12 TTY）：推进申请 operation_id=${operationId} 的 confirm 步（D-22：主体只记本地不透明 ID）。`;
+  return `项目负责人于本机真人终端确认（B-12 TTY）：推进申请 operation_id=${operationId} 的 confirm 步（D-22：主体只记本地不透明 ID）。`;
 }
 function applyNote(operationId: string, from: string, to: string): string {
-  return `主理人确认后执行推进 ${from} → ${to}（operation_id=${operationId}，apply 步）；阶段迁移由事件折叠派生（D-24）。`;
+  return `项目负责人确认后执行推进 ${from} → ${to}（operation_id=${operationId}，apply 步）；阶段迁移由事件折叠派生（D-24）。`;
 }
 
 /**
@@ -597,7 +597,7 @@ export function runPromote(
     if (unverifiedCore > 0 || receiptsState.receipts.length !== coreEnvelopes.length) {
       io.err(
         `收据链与 changelog 的 core 事件不一一对应（收据 ${receiptsState.receipts.length} 条 vs 文档 core 事件 ${coreEnvelopes.length} 笔，其中 ${unverifiedCore} 笔未验真）——` +
-          '此时重建将改写既有链语义（含把未登记的手工 core 事件转正，R-09），拒绝推进。请由主理人先理顺事件流与收据库。',
+          '此时重建将改写既有链语义（含把未登记的手工 core 事件转正，R-09），拒绝推进。请由项目负责人先理顺事件流与收据库。',
       );
       return 2;
     }

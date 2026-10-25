@@ -24,7 +24,7 @@ import {
   type WbsParseResult,
 } from './wbsSyntax.js';
 
-/** 任务状态枚举（主理人 2026-10-19 确认：双语并列，机器权威层以英文为准） */
+/** 任务状态枚举（项目负责人 2026-10-19 确认：双语并列，机器权威层以英文为准） */
 export const WBS_STATUS_VALUES = ['todo', 'doing', 'done', 'blocked', 'dropped'] as const;
 export type WbsStatus = (typeof WBS_STATUS_VALUES)[number];
 

@@ -130,11 +130,11 @@ export function runInit(argv: readonly string[], io: CliIo, cwd: string = proces
   }
 
   // 时钟与身份由壳层注入（core 不取系统时间/随机数）：时间 ISO 8601 带时区（Z），
-  // 身份为 randomBytes hex 不透明 ID（D-19）；描述无对应参数，留待主理人补充的占位文案。
+  // 身份为 randomBytes hex 不透明 ID（D-19）；描述无对应参数，留待项目负责人补充的占位文案。
   const seed: ProjectSeed = {
     projectName: inputs.projectName,
     slug: inputs.slug,
-    description: '（待主理人补充项目描述）',
+    description: '（待项目负责人补充项目描述）',
     initializedAt: new Date().toISOString(),
     initialStage: inputs.stage,
     actorId: randomBytes(16).toString('hex'),
@@ -147,7 +147,7 @@ export function runInit(argv: readonly string[], io: CliIo, cwd: string = proces
   if (existsSync(pmDir)) {
     io.err(`拒绝初始化：${pmDir} 已存在（R-06 不覆盖，绝不写入或修改既有文件）。`);
     io.err('若为重复执行：本项目疑似已初始化——幂等重跑同样拒绝。');
-    io.err('如确需重建，请由主理人人工处理现有 pm/ 目录（本命令不做任何删除动作，W-03）。');
+    io.err('如确需重建，请由项目负责人人工处理现有 pm/ 目录（本命令不做任何删除动作，W-03）。');
     return 2;
   }
   try {

@@ -8,7 +8,7 @@
  *  - 类型化事件动作 3：record_note / submit_evidence / report_usage。
  *
  * 红线编码（B-4/B-17，server 装配自检 + allowlist.test.ts CI 机器守卫双重保险）：
- *  - **不得**包含 `pass_gate`：门禁开启是主理人人工动作，AI 不得代开（R-03）；
+ *  - **不得**包含 `pass_gate`：门禁开启是项目负责人人工动作，AI 不得代开（R-03）；
  *  - **不得**包含 `append_changelog` 或任何通用事件追加工具：事件只能由类型化动作产生，
  *    MCP 永不提供「直接写事件」的通道（R-09 事件权威性）；
  *  - request_promotion 只产生 `authorization.requested`（绝不产生 authorization.granted/
@@ -95,7 +95,7 @@ export const TOOL_ALLOWLIST: readonly ToolDef[] = [
   {
     name: 'request_promotion',
     description:
-      '发起阶段推进申请（写入）：只产生待审 authorization.requested 事件；**绝不**产生 authorization.granted / authorization.locally_confirmed（B-4/R-03：批准是主理人人工动作）。',
+      '发起阶段推进申请（写入）：只产生待审 authorization.requested 事件；**绝不**产生 authorization.granted / authorization.locally_confirmed（B-4/R-03：批准是项目负责人人工动作）。',
   },
   // —— 类型化事件动作 3（handler 由后续阶段注册；描述即契约） ——
   {

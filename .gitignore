@@ -13,3 +13,16 @@ logs/
 !.env.example
 .DS_Store
 Thumbs.db
+
+# 内部治理与开发过程文档（开源仓库不含；本地保留继续使用——2026-10-25 主理人指令出仓）
+/00-开发基准.md
+/01-TASK-SPECTRUM.md
+/02-CHANGELOG.md
+/AGENTS.md
+/PROJECT-INDEX.md
+/docs/plans/
+/docs/review/
+/docs/design/
+/docs/progress/
+/docs/guides/release-rc1.md
+/pm/

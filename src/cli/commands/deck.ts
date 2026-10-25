@@ -82,7 +82,7 @@ function renderInitGuide(io: CliIo): void {
   io.out('尚未初始化：先运行 gatedeck init（在当前目录生成 pm/ 契约文件骨架）。');
   io.out('');
   io.out('决策台（decision deck）三区一览——初始化后运行 gatedeck deck 查看：');
-  io.out('  ◆ 等您决定 —— 待验收门禁 / 待审推进申请，等待主理人裁决的事项');
+  io.out('  ◆ 等您决定 —— 待验收门禁 / 待审推进申请，等待项目负责人裁决的事项');
   io.out('  ◆ 可以推进 —— 前置依赖已满足、当前阶段内可领取的任务');
   io.out('  ◆ 需要关注 —— 任务阻塞 / 证据过期待复验 / 事件链需处理');
   io.out('（另有「进行中」区展示正在进行的任务；尾部携带 as_of 与源版本。）');

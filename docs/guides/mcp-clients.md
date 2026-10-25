@@ -191,7 +191,7 @@ AI 依据 deps（前置）与 status 选定要领的任务，例如 `T-003`。
 }
 ```
 
-到这一步 AI 的工作就结束了：它只产出一条**待审申请**。你（主理人）在本机终端跑：
+到这一步 AI 的工作就结束了：它只产出一条**待审申请**。你在本机终端跑：
 
 ```bash
 gatedeck promote --operation-id <上面返回的 operationId>
@@ -203,7 +203,7 @@ TTY 三步编排（confirm/apply）确认后才发生真正的授权与状态迁
 
 gatedeck-mcp 的 15 个工具由结构性白名单把守（`src/mcp/tools/registry.ts` 唯一事实源；server 启动即自检，越界拒绝启动）：
 
-- **没有 `pass_gate`**：门禁开启是主理人人工动作（R-03），该名字在注册表层被永久禁止（B-4/B-17 禁名清单），配上也不存在。
+- **没有 `pass_gate`**：门禁开启是项目负责人的人工动作（R-03），该名字在注册表层被永久禁止（B-4/B-17 禁名清单），配上也不存在。
 - **没有通用事件写入**（无 `append_changelog`）：事件只能由类型化动作产生——`record_note`（非权威备注）、`submit_evidence`（待验证据）、`report_usage`（用量）、`request_promotion`（推进申请）；AI 造不出任意 kind 的事件。
 - **`request_promotion` 只产生申请**：只写 `authorization.requested`（integrity=unknown，不驱动状态），**绝不**产生 `authorization.granted` / `authorization.locally_confirmed`；批准与执行必须本机 CLI 真人 TTY（`gatedeck promote`）。
 - **`submit_evidence` 只产生待验证据**：只写 `evidence.submitted`，不产生 `check.completed` / `task.transitioned`。

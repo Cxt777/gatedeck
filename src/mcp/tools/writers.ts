@@ -204,7 +204,7 @@ export function updateTask(rootDir: string, args: UpdateTaskParams, deps: McpToo
       return writeError(
         'field-absent',
         `任务 ${args.id} 节点中不存在字段「${u.key}」：MCP 局部修改不静默新增字段（core 契约：新增字段属模板演进）；` +
-          '可用 get_task 查看现有字段，或由主理人人工编辑节点补齐字段后再改值。',
+          '可用 get_task 查看现有字段，或由项目负责人人工编辑节点补齐字段后再改值。',
       );
     }
     const next = updateTaskFieldById(text, working, args.id.trim(), u.key, u.value);

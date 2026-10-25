@@ -64,7 +64,7 @@ const ID_5TH = '01JBM0DR000000000000000005';
 const DEMO_WBS = [
   '# demo-project WBS',
   '',
-  '<!-- 主理人手写注释：演示项目，机器不得吞掉本行（R-04） -->',
+  '<!-- 项目负责人手写注释：演示项目，机器不得吞掉本行（R-04） -->',
   '',
   '### T-001 初始化项目',
   '',
@@ -113,7 +113,7 @@ const DEMO_CHANGELOG = [
   '',
   '<!-- 人类说明：块外自由文本不驱动状态（R-09） -->',
   '',
-  '主理人批注（2026-10-24 上午）：demo-project 今日立项，并完成两笔任务迁移；以下 fenced 块为机器权威事件流。',
+  '项目负责人批注（2026-10-24 上午）：demo-project 今日立项，并完成两笔任务迁移；以下 fenced 块为机器权威事件流。',
   '',
   demoEventBlock([
     `event_id: ${ID_INIT}`,
@@ -279,7 +279,7 @@ describe('M0 门禁演练 · demo-project 数据底座', () => {
     expect(parsed.nodes).toHaveLength(3);
     expect(parsed.nodes.map((n) => getNodeField(n, 'id'))).toEqual(['T-001', 'T-002', 'T-003']);
     expect(parsed.nodes.map((n) => getNodeField(n, 'status'))).toEqual(['todo', 'doing', 'done']);
-    expect(DEMO_WBS).toContain('<!-- 主理人手写注释：演示项目，机器不得吞掉本行（R-04） -->');
+    expect(DEMO_WBS).toContain('<!-- 项目负责人手写注释：演示项目，机器不得吞掉本行（R-04） -->');
   });
 
   it('底座：demoChangelog 三笔信封逐字段合法（ULID/带时区/core 通道），人类说明不产信封', () => {
@@ -305,7 +305,7 @@ describe('M0 门禁演练 · demo-project 数据底座', () => {
     expect(e2!.payload).toEqual({ task_id: 'T-001', from: 'todo', to: 'doing' });
     expect(e3!.payload).toEqual({ task_id: 'T-002', from: 'todo', to: 'doing' });
     // 块外人类说明与 HTML 注释不是事件块：不产信封（条目数只来自 3 个 fenced 块）
-    expect(DEMO_CHANGELOG).toContain('主理人批注（2026-10-24 上午）');
+    expect(DEMO_CHANGELOG).toContain('项目负责人批注（2026-10-24 上午）');
   });
 });
 
@@ -339,7 +339,7 @@ describe('第一关 保真：round-trip / P-04 / B-10 / B-11', () => {
     expect(linesBefore[20]).toBe('status: doing');
     expect(linesAfter[20]).toBe('status: done');
     // 注释行、未知字段、块外文本、CRLF 风格全部保留
-    expect(after).toContain('<!-- 主理人手写注释：演示项目，机器不得吞掉本行（R-04） -->');
+    expect(after).toContain('<!-- 项目负责人手写注释：演示项目，机器不得吞掉本行（R-04） -->');
     expect(after).toContain('备注: 手写未知字段（F-06 保留）');
     expect(after).toContain('unknown_field_x: 保留我');
     expect(after).toContain('块外自由文本：人类说明，不参与状态推导。');
@@ -678,7 +678,7 @@ describe('第三关 中断：跨文件操作四相恢复（P-06/B-2）', () => {
     expect(parsed.nodes).toHaveLength(3);
     const t2 = parsed.nodes.find((n) => getNodeField(n, 'id') === 'T-002');
     expect(getNodeField(t2!, 'status')).toBe('done'); // 恢复后的目标状态
-    expect(WBS_NEXT).toContain('<!-- 主理人手写注释：演示项目，机器不得吞掉本行（R-04） -->');
+    expect(WBS_NEXT).toContain('<!-- 项目负责人手写注释：演示项目，机器不得吞掉本行（R-04） -->');
     expect(WBS_NEXT).toContain('备注: 手写未知字段（F-06 保留）');
     expect(WBS_NEXT).toContain('unknown_field_x: 保留我');
     const v = validateWbsDocument(WBS_NEXT, parsed);

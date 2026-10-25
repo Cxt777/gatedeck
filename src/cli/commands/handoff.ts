@@ -9,7 +9,7 @@
  *  - rules      = pm/gates.md 原文；
  *  - decisions  = pm/changelog.md 最近 N=5 笔事件的元数据摘要（M1 不提取块外人类说明）；
  *  - evidence   = 最近 5 笔中证据相关（evidence.submitted / check.completed）的摘要；
- *  - failed-paths / acceptance = 留空段，正文标注「（待补充——AI 会话或主理人填写）」；
+ *  - failed-paths / acceptance = 留空段，正文标注「（待补充——AI 会话或项目负责人填写）」；
  *  - version    = changelog 事件日志投影（projectEventLog + foldStage）；M1 阶段收据
  *    链路未接入 CLI（锚点路径待存储层定稿），以空收据集投影——未经验证的事件一律
  *    external-unverified、不驱动状态（P-09），版本如实显示，绝不虚报代数；
@@ -41,7 +41,7 @@ const RECENT_EVENTS = 5;
 const DEFAULT_SOFT_BUDGET_TOKENS = 8000;
 
 /** 待填充占位文案（failed-paths / acceptance 留空段的标准标注） */
-const TODO_PLACEHOLDER = '（待补充——AI 会话或主理人填写）';
+const TODO_PLACEHOLDER = '（待补充——AI 会话或项目负责人填写）';
 
 /** 尽力读取文本文件；不存在/读取失败返回 null（不抛出、不编造） */
 function readTextOrNull(filePath: string): string | null {

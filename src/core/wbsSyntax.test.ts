@@ -22,7 +22,7 @@ const FENCED_SAMPLE = [
   'id: T-M0a-02',
   'title: 节点语法三方案对比原型',
   'status: doing',
-  'owner: 夜间开发任务',
+  'owner: 张三',
   'deps: T-M0a-01',
   '自定义字段-示例: 未知的字段值也要保留',
   'note: 值里允许中文与符号：冒号、波浪线与更短的内层 fence（见下）',

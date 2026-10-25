@@ -116,21 +116,6 @@ Client configuration examples will be added once gatedeck-mcp ships with the rc:
 
 <!-- MCP 配置随 gatedeck-mcp 发布后补充 -->
 
-## The ¥999 value checklist
-
-This is not a price — **the rc is free and open source (MIT)**. It is a self-imposed quality bar, anchored to the price band of a reasonably priced paid tool: after using it, is it worth ¥999 (CNY)? If we ever introduce paid tiers, that will be announced separately; this list is not a pricing commitment.
-
-| # | Value promise | Acceptance criterion |
-|---|---|---|
-| 1 | **Onboard in 5 minutes** | On a clean machine: `npx gatedeck@early` → `init` → deck visible on first screen, all within 5 minutes |
-| 2 | **AI takeover in 3 minutes** | A brand-new AI session, via gatedeck-mcp, accurately restates the project state and names the next step after reading the overview and WBS |
-| 3 | **Verifiable evidence** | The whole promotion path (gate check → request promotion → TTY confirmation → state transition) is replayable; events carry hash receipts and tampering is detectable |
-| 4 | **Local-first, portable** | Fully usable offline; data is plain Markdown — `git diff`-able and movable by copying a directory |
-| 5 | **Docs & support** | Bilingual README + client onboarding guide + FAQ + rollback instructions |
-| 6 | **Stability floor** | CI green (real first run in the cloud) + clean-environment install smoke test + rehearsed npm rollback path |
-
-The criteria are acceptance lines, not marketing copy: the release notes will report, item by item, where things actually stand.
-
 ## Early-access honesty note
 
 The current version is **0.1.0-rc.1** (npm dist-tag `early`) — a release candidate, not the official release. To ship the shortest valuable path first (onboard → deck → evidence → handoff → AI takeover), the following are explicitly deferred (all on the roadmap for the official release / M2):
