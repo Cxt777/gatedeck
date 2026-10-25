@@ -1,7 +1,13 @@
 # 发布手册 · gatedeck v0.1.0-rc.1（W-S4-3 / CP-3）
 
-> 状态：**发布工程已完全就绪，仅剩发布动作**（npm 凭证物理缺失——本机 `npm whoami` ENEEDAUTH、`~/.npmrc` 无 authToken，冲刺期无法交互登录）。
-> 依主理人冲刺预授权：发布工程与全部验证已由 AI 备好；**发布动作一条命令**，主理人登录后执行或提供 token 后由 AI 执行。
+> 状态（2026-10-25 更新）：**A 轨已上线**——GitHub 直装可用（`npx github:Cxt777/gatedeck`，prepare 现场构建，三 bin 实测通过），零 npm 账号依赖；**B 轨（npm registry 正式发布）待主理人注册 npm 账号**（主理人尚无 npm 账号）。
+
+## 〇、B 轨前置：注册 npm 账号（约 2 分钟，一次性）
+
+1. 浏览器打开 <https://www.npmjs.com/signup>，用邮箱 + 用户名 + 密码注册（或点 Sign in with GitHub 直接用 GitHub 账号授权——更快，无需另记密码）；
+2. 收验证邮件点确认；
+3. 在本机执行一条命令完成登录（会弹浏览器确认）：`npm login`；
+4. 登录后告知 AI，或自行执行下面的一键发布。
 
 ## 一、一键发布（主理人执行）
 

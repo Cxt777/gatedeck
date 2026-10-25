@@ -63,6 +63,15 @@ as_of=2026-10-24T23:55:49.721Z · 源版本=1
 npx gatedeck@early
 ```
 
+> **npm 渠道说明**：`gatedeck@early` 需要 npm registry 正式发布（进行中）。在正式发布前，可以**直接从 GitHub 安装使用**（效果等同，自动现场构建）：
+>
+> ```bash
+> npx github:Cxt777/gatedeck
+> # 或全局安装：npm install -g github:Cxt777/gatedeck
+> ```
+>
+> 后文所有 `npx gatedeck@early` 在正式发布前均可用 `npx github:Cxt777/gatedeck` 等价替换（已装全局则直接 `gatedeck` / `pm` / `gatedeck-mcp`）。
+
 不带参数运行会打印帮助（下为当前实际输出节选，随版本演进以 `gatedeck --help` 实际输出为准）：
 
 ```text
